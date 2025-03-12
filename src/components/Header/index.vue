@@ -80,7 +80,7 @@ const onAddRecipe = () => {
 }
 
 const goToUserProfile = () => {
-  router.push('/user/profile')
+  router.push('/ProfileSidebar/profile')
 }
 </script>
 
