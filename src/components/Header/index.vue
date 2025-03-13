@@ -2,12 +2,15 @@
   <a-layout-header class="header">
     <div class="header-content">
       <div class="left">
-        <h1 class="logo">我的菜谱管家</h1>
+        <h1 class="logo">
+          <span class="logo-text">味见好时光</span>
+        </h1>
         <a-menu
             v-model:selectedKeys="selectedKeys"
             mode="horizontal"
             :items="menuItems"
             class="custom-menu"
+            @click="handleMenuClick"
         />
       </div>
       <div class="right">
@@ -128,6 +131,28 @@ const onAddRecipe = () => {
 // 显示登录模态框
 const showLoginModal = () => {
   authModalRef.value?.showLoginModal()
+}
+
+const handleMenuClick = (e: { key: string }) => {
+  switch(e.key) {
+    case 'home':
+      router.push('/');
+      break;
+    case 'recipes':
+      router.push('/recipes');
+      break;
+    case 'ingredients':
+      router.push('/ingredients');
+      break;
+    case 'shopping':
+      router.push('/shopping');
+      break;
+    case 'statistics':
+      router.push('/statistics');
+      break;
+    default:
+      router.push('/');
+  }
 }
 
 // 修改goToUserProfile方法
@@ -321,6 +346,79 @@ const handleLogout = () => {
   .custom-menu :deep(.ant-menu-item) {
     font-size: 14px;
     padding: 0 8px;
+  }
+}
+
+/* 新增的logo样式 */
+.logo {
+  margin: 0 48px 0 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fa8c16;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.logo-text {
+  font-size: 22px;
+  letter-spacing: 1px;
+}
+
+.logo-subtitle {
+  font-size: 12px;
+  font-weight: normal;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+/* 响应式适配 */
+@media (max-width: 992px) {
+  .logo-text {
+    font-size: 20px;
+  }
+
+  .logo-subtitle {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo {
+    margin-right: 24px;
+  }
+
+  .logo-subtitle {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .logo {
+    margin-right: 16px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+}
+
+/* 超小屏幕适配 */
+@media (max-width: 480px) {
+  .header-content {
+    padding: 0 12px;
+  }
+
+  .logo {
+    margin-right: 8px;
+  }
+
+  .logo-text {
+    font-size: 16px;
+  }
+
+  .custom-menu :deep(.ant-menu-item) {
+    padding: 0 6px;
+    font-size: 13px;
   }
 }
 </style>
