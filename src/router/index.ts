@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import BasicLayout from '@/layouts/BasicLayout.vue'
 import {useUserStore} from "@/stores/user";
 import Auth from "@/utils/auth.ts";

@@ -3,27 +3,27 @@
     <div class="profile-header">
       <div class="avatar-container">
         <div class="avatar">
-          {{ user.nickname.charAt(0) }}
+          {{ user?.nickname?.charAt(0) || 'U' }}
         </div>
       </div>
-      <h2 class="username">{{ user.nickname }}</h2>
-      <p class="register-time">注册时间: {{ formatDate(user.registerTime) }}</p>
+      <h2 class="username">{{ user?.nickname || 'User' }}</h2>
+      <p class="register-time">注册时间: {{ formatDate(user?.registerDate || user?.registerTime) }}</p>
     </div>
 
     <div class="profile-stats">
       <div class="stat-item" @click="navigateTo('/recipes/my')">
         <span class="stat-label">我的菜谱</span>
-        <span class="stat-value">{{ user.recipeCount || 32 }} 个</span>
+        <span class="stat-value">{{ user?.recipesCount || user?.recipeCount || 32 }} 个</span>
       </div>
 
       <div class="stat-item" @click="navigateTo('/ingredients')">
         <span class="stat-label">食材库存</span>
-        <span class="stat-value">{{ user.ingredientCount || 15 }} 种</span>
+        <span class="stat-value">{{ user?.ingredientsCount || user?.ingredientCount || 15 }} 种</span>
       </div>
 
       <div class="stat-item" @click="navigateTo('/cooking-history')">
         <span class="stat-label">本月烹饪</span>
-        <span class="stat-value">{{ user.monthCookingCount || 28 }} 次</span>
+        <span class="stat-value">{{ user?.monthlyCookingCount || user?.monthCookingCount || 28 }} 次</span>
       </div>
     </div>
 
@@ -43,38 +43,65 @@
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { SCRIPT_URL } from '@/constants/iconfont.ts'
-import {createFromIconfontCN} from "@ant-design/icons-vue";
+import { createFromIconfontCN } from "@ant-design/icons-vue";
 
-
-
-
+// 修改接口定义，使其兼容多种属性名
 interface UserProfileProps {
   user: {
-    id: number | string
-    nickname: string
+    id?: number | string
+    nickname?: string
     avatar?: string
-    registerTime: string
+    registerDate?: string
+    registerTime?: string
+    recipesCount?: number
     recipeCount?: number
+    ingredientsCount?: number
     ingredientCount?: number
+    monthlyCookingCount?: number
     monthCookingCount?: number
+    [key: string]: any
   }
 }
 
 const IconFont = createFromIconfontCN({
   scriptUrl: SCRIPT_URL,
 })
+
 const props = defineProps<UserProfileProps>()
 
 const router = useRouter()
 
 // 格式化日期
-const formatDate = (dateString: string) => {
+const formatDate = (dateString?: string) => {
+  if (!dateString) return 'N/A'
   return dayjs(dateString).format('YYYY-MM-DD')
 }
 
-// 页面导航
+// 页面导航 - 修改导航方法
 const navigateTo = (path: string) => {
-  router.push(path)
+  console.log('导航到:', path)
+
+  // 根据不同路径做特殊处理
+  switch (path) {
+    case '/settings':
+      router.push({ path: '/settings' }).catch(err => {
+        console.error('导航错误:', err)
+        // 尝试其他可能的路径
+        router.push({ name: 'Settings' }).catch(e => console.error('无法导航到设置页面:', e))
+      })
+      break
+    case '/help':
+      router.push({ path: '/help' }).catch(err => {
+        console.error('导航错误:', err)
+        // 尝试其他可能的路径
+        router.push({ name: 'Help' }).catch(e => console.error('无法导航到帮助页面:', e))
+      })
+      break
+    default:
+      router.push(path).catch(err => {
+        console.error('导航错误:', err)
+      })
+  }
 }
 </script>
 
@@ -143,8 +170,21 @@ const navigateTo = (path: string) => {
   transition: background-color 0.2s;
 }
 
+/* 修改统计项目卡片的悬停效果 */
 .stat-item:hover {
-  background-color: #f0f0f0;
+  background-color: rgba(250, 140, 22, 0.1); /* 浅橙色背景，低透明度 */
+  transform: translateY(-2px); /* 轻微上浮效果，增强交互感 */
+  box-shadow: 0 2px 8px rgba(250, 140, 22, 0.08); /* 轻微阴影提升 */
+  transition: all 0.3s ease;
+}
+
+/* 悬停时文字颜色变化 */
+.stat-item:hover .stat-label {
+  color: #fa8c16; /* 左侧标签文字变为橙色 */
+}
+
+.stat-item:hover .stat-value {
+  color: #fa8c16; /* 右侧数值文字变为橙色 */
 }
 
 .stat-label {
@@ -181,7 +221,14 @@ const navigateTo = (path: string) => {
 }
 
 .action-button:hover {
-  background-color: #f0f0f0;
+  background-color: rgba(250, 140, 22, 0.1); /* 浅橙色背景，低透明度 */
+  color: #fa8c16; /* 悬停时文字变为橙色，增强交互感 */
+  transition: all 0.3s ease;
+}
+
+/* 悬停时图标颜色也改为橙色 */
+.action-button:hover .button-icon {
+  color: #fa8c16;
 }
 
 /* 添加图标与文字间的间距 */

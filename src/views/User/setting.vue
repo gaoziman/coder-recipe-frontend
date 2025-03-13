@@ -97,7 +97,7 @@
                 </a-list>
 
                 <div class="notification-actions">
-                  <a-button type="primary" @click="saveNotificationSettings">保存设置</a-button>
+                  <a-button  type="primary" @click="saveNotificationSettings">保存设置</a-button>
                 </div>
               </div>
             </a-tab-pane>
@@ -151,7 +151,7 @@
                 </a-list>
 
                 <div class="privacy-actions">
-                  <a-button type="primary" @click="savePrivacySettings">保存设置</a-button>
+                  <a-button  type="primary" @click="savePrivacySettings">保存设置</a-button>
                 </div>
               </div>
             </a-tab-pane>
@@ -165,7 +165,7 @@
                         <h4 class="security-title">修改密码</h4>
                         <p class="security-desc">定期更改密码可以提高账号安全性</p>
                       </div>
-                      <a-button type="link" @click="showPasswordModal">修改</a-button>
+                      <a-button type="dashed" @click="showPasswordModal">修改</a-button>
                     </div>
                   </a-list-item>
 
@@ -175,7 +175,7 @@
                         <h4 class="security-title">绑定手机</h4>
                         <p class="security-desc">{{ userInfo.phone ? '已绑定：' + maskPhone(userInfo.phone) : '绑定手机号码以保护账号安全' }}</p>
                       </div>
-                      <a-button type="link" @click="showPhoneModal">{{ userInfo.phone ? '更换' : '绑定' }}</a-button>
+                      <a-button type="dashed" @click="showPhoneModal">{{ userInfo.phone ? '更换' : '绑定' }}</a-button>
                     </div>
                   </a-list-item>
 
@@ -185,7 +185,7 @@
                         <h4 class="security-title">绑定邮箱</h4>
                         <p class="security-desc">{{ userInfo.email ? '已绑定：' + maskEmail(userInfo.email) : '绑定邮箱以接收重要通知' }}</p>
                       </div>
-                      <a-button type="link" @click="showEmailModal">{{ userInfo.email ? '更换' : '绑定' }}</a-button>
+                      <a-button type="dashed" @click="showEmailModal">{{ userInfo.email ? '更换' : '绑定' }}</a-button>
                     </div>
                   </a-list-item>
 
@@ -195,7 +195,7 @@
                         <h4 class="security-title">登录设备管理</h4>
                         <p class="security-desc">查看并管理已登录的设备</p>
                       </div>
-                      <a-button type="link" @click="showDevicesModal">管理</a-button>
+                      <a-button  type="dashed" @click="showDevicesModal">管理</a-button>
                     </div>
                   </a-list-item>
                 </a-list>
@@ -228,6 +228,100 @@
         </a-form-item>
       </a-form>
     </a-modal>
+
+    <!-- 绑定手机弹窗 -->
+    <a-modal
+        v-model:visible="phoneModalVisible"
+        title="绑定手机"
+        @ok="savePhoneNumber"
+        :maskClosable="false"
+    >
+      <a-form layout="vertical">
+        <a-form-item label="手机号码" name="phone">
+          <a-input v-model:value="phoneForm.number" placeholder="请输入11位手机号码" />
+        </a-form-item>
+        <a-form-item label="验证码" name="code">
+          <div style="display: flex; gap: 8px;">
+            <a-input v-model:value="phoneForm.code" placeholder="请输入验证码" style="flex: 1;" />
+            <a-button :disabled="phoneForm.countdown > 0" @click="sendPhoneCode">
+              {{ phoneForm.countdown > 0 ? `${phoneForm.countdown}秒后重发` : '获取验证码' }}
+            </a-button>
+          </div>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+
+    <!-- 绑定邮箱弹窗 -->
+    <a-modal
+        v-model:visible="emailModalVisible"
+        title="绑定邮箱"
+        @ok="saveEmail"
+        :maskClosable="false"
+    >
+      <a-form layout="vertical">
+        <a-form-item label="邮箱地址" name="email">
+          <a-input v-model:value="emailForm.address" placeholder="请输入邮箱地址" />
+        </a-form-item>
+        <a-form-item label="验证码" name="code">
+          <div style="display: flex; gap: 8px;">
+            <a-input v-model:value="emailForm.code" placeholder="请输入验证码" style="flex: 1;" />
+            <a-button :disabled="emailForm.countdown > 0" @click="sendEmailCode">
+              {{ emailForm.countdown > 0 ? `${emailForm.countdown}秒后重发` : '获取验证码' }}
+            </a-button>
+          </div>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+
+    <!-- 设备管理弹窗 -->
+    <a-modal
+        v-model:visible="devicesModalVisible"
+        title="登录设备管理"
+        :footer="null"
+        width="600px"
+        :maskClosable="false"
+    >
+      <div class="devices-list">
+        <a-list
+            itemLayout="horizontal"
+            :dataSource="devicesList"
+        >
+          <template #renderItem="{ item }">
+            <a-list-item>
+              <a-list-item-meta>
+                <template #avatar>
+                  <div class="device-icon">
+                    <component :is="getDeviceIcon(item.type)" />
+                  </div>
+                </template>
+                <template #title>
+                  <div class="device-title">
+                    {{ item.name }}
+                    <a-tag v-if="item.current" color="green">当前设备</a-tag>
+                  </div>
+                </template>
+                <template #description>
+                  <div class="device-info">
+                    <p>{{ item.os }} · {{ item.browser }}</p>
+                    <p>最近登录: {{ item.lastLogin }}</p>
+                    <p>IP地址: {{ item.ip }} · {{ item.location }}</p>
+                  </div>
+                </template>
+              </a-list-item-meta>
+              <template #extra>
+                <a-button
+                    danger
+                    :disabled="item.current"
+                    @click="logoutDevice(item.id)"
+                >
+                  退出登录
+                </a-button>
+              </template>
+            </a-list-item>
+          </template>
+        </a-list>
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -235,7 +329,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import { useUserStore } from '@/stores/user'
-import { UploadOutlined } from '@/utils/icons'
+import {DesktopOutlined, MobileOutlined, TabletOutlined, UploadOutlined} from '@ant-design/icons-vue';
 import UserProfileCard from '@/components/ProfileSidebar/index.vue'
 
 const userStore = useUserStore()
@@ -303,6 +397,60 @@ const changePassword = () => {
   passwordForm.confirmPassword = ''
 }
 
+// 电话相关
+const phoneModalVisible = ref(false)
+const phoneForm = reactive({
+  number: '',
+  code: '',
+  countdown: 0
+})
+
+// 邮箱相关
+const emailModalVisible = ref(false)
+const emailForm = reactive({
+  address: '',
+  code: '',
+  countdown: 0
+})
+
+// 设备管理相关
+const devicesModalVisible = ref(false)
+const devicesList = ref([
+  {
+    id: 1,
+    name: 'Windows 电脑',
+    type: 'desktop',
+    os: 'Windows 11',
+    browser: 'Chrome 122',
+    lastLogin: '2025-03-13 08:32',
+    ip: '192.168.1.1',
+    location: '广东省深圳市',
+    current: true
+  },
+  {
+    id: 2,
+    name: 'iPhone 15 Pro',
+    type: 'mobile',
+    os: 'iOS 17',
+    browser: 'Safari',
+    lastLogin: '2025-03-12 20:15',
+    ip: '118.122.xx.xx',
+    location: '广东省广州市',
+    current: false
+  },
+  {
+    id: 3,
+    name: 'iPad Air',
+    type: 'tablet',
+    os: 'iPadOS 17',
+    browser: 'Safari',
+    lastLogin: '2025-03-10 12:44',
+    ip: '220.181.xx.xx',
+    location: '北京市海淀区',
+    current: false
+  }
+])
+
 // 手机号脱敏显示
 const maskPhone = (phone: string) => {
   if (!phone) return ''
@@ -340,17 +488,150 @@ const savePrivacySettings = () => {
 
 // 显示绑定手机弹窗
 const showPhoneModal = () => {
-  // 实现弹窗逻辑
+  phoneModalVisible.value = true
+  // 如果已有手机号，预填表单
+  if (userInfo.value?.phone) {
+    phoneForm.number = userInfo.value.phone
+  }
+}
+
+// 发送手机验证码
+const sendPhoneCode = () => {
+  if (!phoneForm.number) {
+    message.error('请输入手机号码')
+    return
+  }
+
+  if (!/^1[3-9]\d{9}$/.test(phoneForm.number)) {
+    message.error('请输入正确的手机号码格式')
+    return
+  }
+
+  // 模拟发送验证码
+  message.success(`验证码已发送至 ${maskPhone(phoneForm.number)}`)
+
+  // 开始倒计时
+  phoneForm.countdown = 60
+  const timer = setInterval(() => {
+    phoneForm.countdown--
+    if (phoneForm.countdown <= 0) {
+      clearInterval(timer)
+    }
+  }, 1000)
+}
+
+// 保存手机号
+const savePhoneNumber = () => {
+  if (!phoneForm.number || !phoneForm.code) {
+    message.error('请填写完整信息')
+    return
+  }
+
+  if (!/^1[3-9]\d{9}$/.test(phoneForm.number)) {
+    message.error('请输入正确的手机号码格式')
+    return
+  }
+
+  // 模拟验证成功
+  message.success('手机绑定成功')
+
+  // 更新用户信息
+  if (userStore.userInfo) {
+    userStore.updateUserInfo({ phone: phoneForm.number })
+  }
+
+  // 关闭弹窗并重置表单
+  phoneModalVisible.value = false
+  phoneForm.code = ''
+  phoneForm.countdown = 0
 }
 
 // 显示绑定邮箱弹窗
 const showEmailModal = () => {
-  // 实现弹窗逻辑
+  emailModalVisible.value = true
+  // 如果已有邮箱，预填表单
+  if (userInfo.value?.email) {
+    emailForm.address = userInfo.value.email
+  }
+}
+
+// 发送邮箱验证码
+const sendEmailCode = () => {
+  if (!emailForm.address) {
+    message.error('请输入邮箱地址')
+    return
+  }
+
+  if (!/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(emailForm.address)) {
+    message.error('请输入正确的邮箱格式')
+    return
+  }
+
+  // 模拟发送验证码
+  message.success(`验证码已发送至 ${maskEmail(emailForm.address)}`)
+
+  // 开始倒计时
+  emailForm.countdown = 60
+  const timer = setInterval(() => {
+    emailForm.countdown--
+    if (emailForm.countdown <= 0) {
+      clearInterval(timer)
+    }
+  }, 1000)
+}
+
+// 保存邮箱
+const saveEmail = () => {
+  if (!emailForm.address || !emailForm.code) {
+    message.error('请填写完整信息')
+    return
+  }
+
+  if (!/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(emailForm.address)) {
+    message.error('请输入正确的邮箱格式')
+    return
+  }
+
+  // 模拟验证成功
+  message.success('邮箱绑定成功')
+
+  // 更新用户信息
+  if (userStore.userInfo) {
+    userStore.updateUserInfo({ email: emailForm.address })
+  }
+
+  // 关闭弹窗并重置表单
+  emailModalVisible.value = false
+  emailForm.code = ''
+  emailForm.countdown = 0
 }
 
 // 显示设备管理弹窗
 const showDevicesModal = () => {
-  // 实现弹窗逻辑
+  devicesModalVisible.value = true
+}
+
+// 获取设备图标
+const getDeviceIcon = (type: string) => {
+  switch (type) {
+    case 'desktop':
+      return DesktopOutlined
+    case 'mobile':
+      return MobileOutlined
+    case 'tablet':
+      return TabletOutlined
+    default:
+      return DesktopOutlined
+  }
+}
+
+// 退出设备登录
+const logoutDevice = (deviceId: number) => {
+  // 模拟API调用
+  message.success('已成功退出该设备的登录')
+
+  // 更新设备列表
+  devicesList.value = devicesList.value.filter(device => device.id !== deviceId)
 }
 
 // 初始化 - 在真实项目中应该从API获取数据
@@ -482,6 +763,30 @@ onMounted(() => {
   margin-top: 24px;
   display: flex;
   justify-content: flex-end;
+}
+
+/* 设备列表样式 */
+.device-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fa8c16;
+  font-size: 20px;
+}
+
+.device-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.device-info p {
+  margin: 0;
+  line-height: 1.6;
 }
 
 /* 响应式适配 */

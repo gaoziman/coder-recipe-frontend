@@ -30,47 +30,10 @@ body {
   --primary-color: #fa8c16;
   --primary-hover: #fa9d32;
   --search-button-color: #4e6ef2;
+  --primary-active: #d48806;      /* 激活色调 - 稍深的橙色 */
+  --primary-outline: rgba(250, 140, 22, 0.2); /* 轮廓色 - 带透明度的橙色 */
 }
 
-/* 按钮颜色重置 */
-.ant-btn-primary {
-  background-color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
-}
-
-.ant-btn-primary:hover {
-  background-color: var(--primary-hover) !important;
-  border-color: var(--primary-hover) !important;
-}
-
-/* 搜索框按钮单独样式 */
-/* 修改搜索按钮和图标颜色为橙色 */
-.ant-input-search .ant-btn {
-  background-color: #fa8c16 !important;
-  border-color: #fa8c16 !important;
-}
-
-.ant-input-search .ant-btn:hover {
-  background-color: #fa9d32 !important;
-  border-color: #fa9d32 !important;
-}
-
-/* 修改搜索图标颜色 */
-.ant-input-search .anticon-search {
-  color: #fff !important;
-}
-
-/* Radio按钮组样式调整 */
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-  color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
-}
-
-.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before {
-  background-color: var(--primary-color) !important;
-}
-
-/* 添加到您的全局样式文件中 */
 
 /* 认证模态框样式 */
 .auth-modal .ant-modal-content {
@@ -208,28 +171,56 @@ body {
   }
 }
 
-/* 登录按钮样式 - 添加到您的组件样式中 */
-.auth-login-btn {
-  background: linear-gradient(to right, #fa8c16, #ffa940) !important;
+/* 使用超高特异性选择器专门针对您的按钮 */
+.header-content .right .auth-login-btn,
+a.auth-login-btn,
+button.auth-login-btn {
+  background-color: var(--primary-color) !important;
   border: none !important;
-  border-radius: 10px !important;
+  color: white !important; /* 强制文字为白色 */
+  border-radius: 8px !important;
   height: 36px !important;
   padding: 0 20px !important;
   font-weight: 500 !important;
   font-size: 14px !important;
-  box-shadow: 0 2px 8px rgba(250, 140, 22, 0.2) !important;
+  box-shadow: 0 2px 6px rgba(250, 140, 22, 0.2) !important;
   transition: all 0.3s ease !important;
 }
 
-.auth-login-btn:hover {
-  background: linear-gradient(to right, #fa9d32, #ffb347) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 4px 12px rgba(250, 140, 22, 0.3) !important;
+/* 同样用高特异性选择器专门针对悬停状态 */
+.header-content .right .auth-login-btn:hover,
+a.auth-login-btn:hover,
+button.auth-login-btn:hover {
+  background-color: var(--primary-hover) !important;
+  color: white !important; /* 悬停时强制文字为白色 */
+  transform: translateY(-1px) !important;
+  box-shadow: 0 3px 8px rgba(250, 140, 22, 0.3) !important;
 }
 
-.auth-login-btn .anticon {
+/* 针对按钮内的任何span元素（通常包含文本） */
+.auth-login-btn span,
+.auth-login-btn:hover span {
+  color: white !important;
+}
+
+/* 用更高特异性针对图标 */
+.auth-login-btn .anticon,
+.auth-login-btn:hover .anticon,
+.header-content .right .auth-login-btn .anticon,
+.header-content .right .auth-login-btn:hover .anticon {
+  color: white !important;
   margin-right: 6px !important;
 }
+
+/* 专门针对SVG图标 */
+.auth-login-btn svg,
+.auth-login-btn:hover svg,
+.auth-login-btn svg path,
+.auth-login-btn:hover svg path {
+  fill: white !important;
+  color: white !important;
+}
+
 
 /*新建菜谱，登录按钮响应式*/
 @media (max-width: 576px) {
@@ -237,4 +228,225 @@ body {
     padding: 0 12px !important;
     font-size: 13px !important;
   }
+}
+
+/* 按钮相关样式覆盖 */
+.ant-btn-primary {
+  color: white !important;
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus,
+.ant-btn-primary:active {
+  color: white !important; /* 悬停/焦点/激活状态文字颜色 */
+}
+
+/* 确保按钮内的图标也是白色 */
+.ant-btn-primary .anticon,
+.ant-btn-primary:hover .anticon,
+.ant-btn-primary:focus .anticon,
+.ant-btn-primary:active .anticon {
+  color: white !important;
+}
+
+/* 针对SVG图标 */
+.ant-btn-primary svg,
+.ant-btn-primary:hover svg,
+.ant-btn-primary svg path,
+.ant-btn-primary:hover svg path {
+  color: white !important;
+  fill: white !important;
+}
+
+/* 确保按钮内的文本内容是白色 */
+.ant-btn-primary span,
+.ant-btn-primary:hover span,
+.ant-btn-primary:focus span,
+.ant-btn-primary:active span {
+  color: white !important;
+}
+
+/* 针对OK按钮的特殊处理 */
+.ant-btn-primary.ant-btn-lg,
+.ant-btn-primary.ant-btn-lg:hover,
+.ant-btn-primary.ant-btn-lg:focus,
+.ant-btn-primary.ant-btn-lg:active {
+  color: white !important;
+}
+
+/* 针对OK按钮的文本 */
+.ant-btn-primary.ant-btn-lg span,
+.ant-btn-primary.ant-btn-lg:hover span {
+  color: white !important;
+}
+
+/* 链接按钮样式覆盖 */
+.ant-btn-link {
+  color: var(--primary-color) !important;
+}
+
+.ant-btn-link:hover,
+.ant-btn-link:focus {
+  color: var(--primary-hover) !important;
+}
+
+/* 文字按钮样式覆盖 */
+.ant-btn-text:hover {
+  background-color: rgba(250, 140, 22, 0.1) !important;
+}
+
+/* 普通按钮悬停边框颜色 */
+.ant-btn:hover,
+.ant-btn:focus {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* 开关组件样式覆盖 */
+.ant-switch-checked {
+  background-color: var(--primary-color) !important;
+}
+
+/* 单选框样式覆盖 */
+.ant-radio-checked .ant-radio-inner {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-radio-inner::after {
+  background-color: var(--primary-color) !important;
+}
+
+.ant-radio-wrapper:hover .ant-radio,
+.ant-radio:hover .ant-radio-inner,
+.ant-radio-input:focus + .ant-radio-inner {
+  border-color: var(--primary-color) !important;
+}
+
+/* 复选框样式覆盖 */
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.ant-checkbox-wrapper:hover .ant-checkbox-inner,
+.ant-checkbox:hover .ant-checkbox-inner,
+.ant-checkbox-input:focus + .ant-checkbox-inner {
+  border-color: var(--primary-color) !important;
+}
+
+/* 输入框样式覆盖 */
+.ant-input:hover,
+.ant-input:focus,
+.ant-input-focused,
+.ant-input-affix-wrapper:hover,
+.ant-input-affix-wrapper:focus,
+.ant-input-affix-wrapper-focused {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px var(--primary-outline) !important;
+}
+
+/* 下拉选择器样式覆盖 */
+.ant-select:hover .ant-select-selector,
+.ant-select-focused .ant-select-selector {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-select-focused .ant-select-selector {
+  box-shadow: 0 0 0 2px var(--primary-outline) !important;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: rgba(250, 140, 22, 0.1) !important;
+  color: var(--primary-color) !important;
+}
+
+/* 标签页样式覆盖 */
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--primary-color) !important;
+}
+
+.ant-tabs-ink-bar {
+  background-color: var(--primary-color) !important;
+}
+
+.ant-tabs-tab:hover {
+  color: var(--primary-hover) !important;
+}
+
+/* 分页样式覆盖 */
+.ant-pagination-item:hover,
+.ant-pagination-item-active {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-pagination-item-active a,
+.ant-pagination-item:hover a {
+  color: var(--primary-color) !important;
+}
+
+.ant-pagination-prev:hover .ant-pagination-item-link,
+.ant-pagination-next:hover .ant-pagination-item-link {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* 表单验证样式覆盖 */
+.ant-form-item-has-success .ant-input,
+.ant-form-item-has-success .ant-input-affix-wrapper,
+.ant-form-item-has-success .ant-input:hover,
+.ant-form-item-has-success .ant-input-affix-wrapper:hover {
+  border-color: var(--primary-color) !important;
+}
+
+/* 弹出菜单样式覆盖 */
+.ant-dropdown-menu-item:hover,
+.ant-dropdown-menu-submenu-title:hover {
+  background-color: rgba(250, 140, 22, 0.1) !important;
+}
+
+/* 日期选择器样式覆盖 */
+.ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner,
+.ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner,
+.ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner {
+  background-color: var(--primary-color) !important;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-picker:hover,
+.ant-picker-focused {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-picker-focused {
+  box-shadow: 0 0 0 2px var(--primary-outline) !important;
+}
+
+/* 折叠面板样式覆盖 */
+.ant-collapse-header:hover {
+  color: var(--primary-color) !important;
+}
+
+/* 步骤条样式覆盖 */
+.ant-steps-item-process .ant-steps-item-icon {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+  color: var(--primary-color) !important;
+}
+
+/* 消息提示样式覆盖 */
+.ant-message-info .anticon,
+.ant-message-success .anticon {
+  color: var(--primary-color) !important;
 }

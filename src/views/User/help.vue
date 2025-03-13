@@ -3,7 +3,7 @@
     <div class="help-content">
       <!-- 左侧个人信息 -->
       <div class="profile-sidebar">
-        <user-profile-card :user="userInfo" />
+        <user-profile-card :user="userInfo"/>
       </div>
 
       <!-- 右侧内容区 -->
@@ -132,7 +132,7 @@
                         @change="handleChange"
                     >
                       <div v-if="fileList.length < 3">
-                        <plus-outlined />
+                        <plus-outlined/>
                         <div style="margin-top: 8px">上传</div>
                       </div>
                     </a-upload>
@@ -142,7 +142,7 @@
                         :footer="null"
                         @cancel="previewVisible = false"
                     >
-                      <img alt="example" style="width: 100%" :src="previewImage" />
+                      <img alt="example" style="width: 100%" :src="previewImage"/>
                     </a-modal>
                   </a-form-item>
 
@@ -165,7 +165,7 @@
                 <div class="contact-cards">
                   <div class="contact-card">
                     <div class="contact-icon">
-                      <mail-outlined />
+                      <mail-outlined/>
                     </div>
                     <h4 class="contact-title">电子邮件</h4>
                     <p class="contact-desc">工作日 9:00-18:00</p>
@@ -174,7 +174,7 @@
 
                   <div class="contact-card">
                     <div class="contact-icon">
-                      <phone-outlined />
+                      <phone-outlined/>
                     </div>
                     <h4 class="contact-title">客服热线</h4>
                     <p class="contact-desc">工作日 9:00-20:00</p>
@@ -183,12 +183,12 @@
 
                   <div class="contact-card">
                     <div class="contact-icon">
-                      <wechat-outlined />
+                      <wechat-outlined/>
                     </div>
                     <h4 class="contact-title">微信公众号</h4>
                     <p class="contact-desc">随时获取最新资讯</p>
                     <div class="qrcode-wrapper">
-                      <img src="https://via.placeholder.com/120" alt="微信公众号二维码" />
+                      <img src="https://via.placeholder.com/120" alt="微信公众号二维码"/>
                     </div>
                   </div>
                 </div>
@@ -197,13 +197,13 @@
                   <h4 class="social-title">关注我们</h4>
                   <div class="social-icons">
                     <a href="#" class="social-icon">
-                      <weibo-outlined />
+                      <weibo-outlined/>
                     </a>
                     <a href="#" class="social-icon">
-                      <instagram-outlined />
+                      <instagram-outlined/>
                     </a>
                     <a href="#" class="social-icon">
-                      <youtube-outlined />
+                      <youtube-outlined/>
                     </a>
                   </div>
                 </div>
@@ -232,7 +232,7 @@
                         :color="getFeedbackStatusColor(feedback.status)"
                     >
                       <template #dot>
-                        <component :is="getFeedbackStatusIcon(feedback.status)" />
+                        <component :is="getFeedbackStatusIcon(feedback.status)"/>
                       </template>
 
                       <div class="feedback-item">
@@ -255,9 +255,9 @@
 
                         <div class="feedback-status">
                           <a-steps :current="getFeedbackStepsCurrent(feedback.status)" size="small">
-                            <a-step title="已提交" />
-                            <a-step title="处理中" />
-                            <a-step title="已解决" />
+                            <a-step title="已提交"/>
+                            <a-step title="处理中"/>
+                            <a-step title="已解决"/>
                           </a-steps>
                         </div>
                       </div>
@@ -274,9 +274,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed, onMounted } from 'vue'
-import { message } from 'ant-design-vue'
-import { useUserStore } from '@/stores/user'
+import {ref, reactive, computed, onMounted} from 'vue'
+import {message} from 'ant-design-vue'
+import {useUserStore} from '@/stores/user'
 import {
   PlusOutlined,
   MailOutlined,
@@ -288,7 +288,7 @@ import {
   CheckCircleOutlined,
   SyncOutlined,
   ClockCircleOutlined
-} from '@/utils/icons'
+} from '@ant-design/icons-vue';
 import UserProfileCard from '@/components/ProfileSidebar/index.vue'
 
 const userStore = useUserStore()
@@ -321,7 +321,7 @@ const handlePreview = async (file) => {
 }
 
 // 处理图片变更
-const handleChange = ({ fileList: newFileList }) => {
+const handleChange = ({fileList: newFileList}) => {
   fileList.value = newFileList
 }
 
@@ -377,52 +377,74 @@ const myFeedbacks = ref([
 // 获取反馈类型文本
 const getFeedbackTypeText = (type) => {
   switch (type) {
-    case 'bug': return '问题反馈'
-    case 'suggestion': return '功能建议'
-    case 'content': return '内容纠错'
-    case 'other': return '其他'
-    default: return '其他'
+    case 'bug':
+      return '问题反馈'
+    case 'suggestion':
+      return '功能建议'
+    case 'content':
+      return '内容纠错'
+    case 'other':
+      return '其他'
+    default:
+      return '其他'
   }
 }
 
 // 获取反馈类型颜色
 const getFeedbackTypeColor = (type) => {
   switch (type) {
-    case 'bug': return 'error'
-    case 'suggestion': return 'processing'
-    case 'content': return 'warning'
-    case 'other': return 'default'
-    default: return 'default'
+    case 'bug':
+      return 'error'
+    case 'suggestion':
+      return 'processing'
+    case 'content':
+      return 'warning'
+    case 'other':
+      return 'default'
+    default:
+      return 'default'
   }
 }
 
 // 获取反馈状态颜色
 const getFeedbackStatusColor = (status) => {
   switch (status) {
-    case 'submitted': return 'blue'
-    case 'processing': return 'orange'
-    case 'resolved': return 'green'
-    default: return 'blue'
+    case 'submitted':
+      return 'blue'
+    case 'processing':
+      return 'orange'
+    case 'resolved':
+      return 'green'
+    default:
+      return 'blue'
   }
 }
 
 // 获取反馈状态图标
 const getFeedbackStatusIcon = (status) => {
   switch (status) {
-    case 'submitted': return ClockCircleOutlined
-    case 'processing': return SyncOutlined
-    case 'resolved': return CheckCircleOutlined
-    default: return ClockCircleOutlined
+    case 'submitted':
+      return ClockCircleOutlined
+    case 'processing':
+      return SyncOutlined
+    case 'resolved':
+      return CheckCircleOutlined
+    default:
+      return ClockCircleOutlined
   }
 }
 
 // 获取反馈处理步骤当前步骤
 const getFeedbackStepsCurrent = (status) => {
   switch (status) {
-    case 'submitted': return 0
-    case 'processing': return 1
-    case 'resolved': return 2
-    default: return 0
+    case 'submitted':
+      return 0
+    case 'processing':
+      return 1
+    case 'resolved':
+      return 2
+    default:
+      return 0
   }
 }
 
@@ -445,7 +467,7 @@ onMounted(() => {
 
 .help-content {
   display: flex;
-  gap: this.description = 32px;
+  gap: this . description = 32px;
 }
 
 .profile-sidebar {

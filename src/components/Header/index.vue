@@ -220,7 +220,7 @@ const handleLogout = () => {
 
 /* 增加菜单项字体大小 */
 .custom-menu :deep(.ant-menu-item) {
-  font-size: 16px;
+  font-size: 15px;
   padding: 0 16px;
 }
 
