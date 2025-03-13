@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import BasicLayout from '@/layouts/BasicLayout.vue'
 import {useUserStore} from "@/stores/user";
+import Auth from "@/utils/auth.ts";
 
 const routes: RouteRecordRaw[] = [
     {
@@ -131,55 +132,28 @@ const router = createRouter({
     routes
 })
 
-// 路由守卫
-router.beforeEach((to, from, next) => {
-    // 设置页面标题
-    document.title = `${to.meta.title} - 我的菜谱管家`
-
-    // 获取用户信息
-    const userStore = useUserStore()
-    const isLoggedIn = userStore.isLoggedIn
-
-    // 需要登录但未登录
-    if (to.meta.requiresAuth && !isLoggedIn) {
-        next({
-            path: '/login',
-            query: { redirect: to.fullPath }
-        })
-        return
-    }
-
-    // 已登录用户访问登录页，重定向到首页
-    if (isLoggedIn && (to.name === 'Login' || to.name === 'Register')) {
-        next({ name: 'Home' })
-        return
-    }
-
-    next()
-})
-
 // 全局前置守卫
-/*router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
     // 设置页面标题
     document.title = `${to.meta.title || '食谱中心'} - 美食爱好者的社区`
 
     // 检查是否需要身份验证
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        // 这里检查用户是否已登录
-        const isLoggedIn = localStorage.getItem('token') !== null
+        const userStore = useUserStore()
 
-        if (!isLoggedIn) {
-            // 如果未登录，重定向到登录页
-            next({
-                path: '/login',
-                query: { redirect: to.fullPath }
-            })
+        // 检查用户是否已登录
+        if (!userStore.isLoggedIn) {
+            // 显示登录框
+            Auth.showLogin()
+
+            // 终止当前导航
+            next(false)
         } else {
             next() // 已登录，继续导航
         }
     } else {
         next() // 不需要身份验证，继续导航
     }
-})*/
+})
 
 export default router

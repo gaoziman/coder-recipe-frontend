@@ -21,32 +21,73 @@
             <search-outlined />
           </template>
         </a-input-search>
-        <a-button type="primary" class="add-recipe" @click="onAddRecipe">
-          <plus-outlined />
+        <!-- 新建菜谱 -->
+        <a-button type="primary"
+                  class="auth-login-btn"
+                  @click="onAddRecipe">
+          <template #icon><plus-outlined /></template>
           新建菜谱
         </a-button>
-        <!-- 用户头像 -->
-        <a-avatar class="user-avatar" @click="goToUserProfile">
+
+        <!-- 用户未登录显示登录按钮 -->
+        <a-button v-if="!userStore.isLoggedIn"
+                  type="primary"
+                  class="auth-login-btn"
+                  @click="showLoginModal">
           <template #icon><user-outlined /></template>
-        </a-avatar>
+          登录
+        </a-button>
+
+        <!-- 用户已登录显示头像和下拉菜单 -->
+        <a-dropdown v-else placement="bottomRight">
+          <a-avatar
+              class="user-avatar"
+              :src="userStore.userInfo?.avatarUrl || userStore.userInfo?.avatar">
+            <template #icon v-if="!userStore.userInfo?.avatarUrl && !userStore.userInfo?.avatar">
+              <user-outlined />
+            </template>
+          </a-avatar>
+          <template #overlay>
+            <a-menu class="dropdown-menu">
+              <a-menu-item key="profile" @click="goToUserProfile">
+                <user-outlined  style="margin-right: 4px;" />
+                <span>个人中心</span>
+              </a-menu-item>
+              <a-menu-divider />
+              <a-menu-item key="logout" @click="handleLogout">
+                <logout-outlined  style="margin-right: 4px; color: #ff4d4f;"/>
+                <span>退出登录</span>
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
       </div>
     </div>
+    <AuthModal ref="authModalRef" />
   </a-layout-header>
 </template>
 
 <script lang="ts" setup>
-// 脚本部分保持不变
-import { ref, computed } from 'vue'
-import { PlusOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons-vue'
+import { ref } from 'vue'
+import {
+  PlusOutlined,
+  SearchOutlined,
+  UserOutlined,
+  LogoutOutlined
+} from '@ant-design/icons-vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import type { IMenuItem } from '@/types'
+import AuthModal from '@/components/AuthModal/index.vue'
+import { message } from 'ant-design-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
 
 const selectedKeys = ref<string[]>(['home'])
-const userInfo = computed(() => userStore.userInfo)
+
+// 在组件setup部分添加
+const authModalRef = ref<InstanceType<typeof AuthModal> | null>(null)
 
 const menuItems: IMenuItem[] = [
   {
@@ -76,11 +117,34 @@ const onSearch = (value: string) => {
 }
 
 const onAddRecipe = () => {
+  // 如果未登录，先弹出登录框
+  if (!userStore.isLoggedIn) {
+    showLoginModal()
+    return
+  }
   router.push('/recipes/add')
 }
 
+// 显示登录模态框
+const showLoginModal = () => {
+  authModalRef.value?.showLoginModal()
+}
+
+// 修改goToUserProfile方法
 const goToUserProfile = () => {
   router.push('/ProfileSidebar/profile')
+}
+
+// 添加退出登录方法
+const handleLogout = () => {
+  userStore.logout()
+  message.success('退出登录成功')
+
+  // 如果当前页面需要登录才能访问，则重定向到首页
+  const currentRoute = router.currentRoute.value
+  if (currentRoute.meta?.requiresAuth) {
+    router.push('/')
+  }
 }
 </script>
 
@@ -126,10 +190,10 @@ const goToUserProfile = () => {
 .add-recipe {
   background: #fa8c16 !important;
   border-color: #fa8c16 !important;
-  border-radius: 4px; /* 增加圆角 */
+  border-radius: 4px;
   height: 32px;
   padding: 0 16px;
-  font-size: 14px; /* 稍微增加按钮文字大小 */
+  font-size: 14px;
 }
 
 .add-recipe:hover {
@@ -137,16 +201,27 @@ const goToUserProfile = () => {
   border-color: #fa9d32 !important;
 }
 
+/* 登录按钮样式 */
+.login-btn {
+  color: #fa8c16 !important;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.login-btn:hover {
+  color: #fa9d32 !important;
+}
+
 /* 修改菜单样式，去掉下划线，只用颜色来表示选中状态 */
 .custom-menu {
   border-bottom: none;
-  line-height: 62px; /* 增加行高以适应更大的字体 */
+  line-height: 62px;
 }
 
 /* 增加菜单项字体大小 */
 .custom-menu :deep(.ant-menu-item) {
-  font-size: 16px; /* 将导航文字从默认尺寸增大到16px */
-  padding: 0 16px; /* 增加水平内边距，使菜单项之间有更好的间距 */
+  font-size: 16px;
+  padding: 0 16px;
 }
 
 .custom-menu :deep(.ant-menu-item-selected) {
@@ -193,6 +268,26 @@ const goToUserProfile = () => {
 
 .user-avatar:hover {
   background-color: #e6e8eb;
+}
+
+/* 下拉菜单样式 */
+:deep(.dropdown-menu .ant-dropdown-menu-item) {
+  padding: 10px 20px;
+}
+
+:deep(.dropdown-menu .ant-dropdown-menu-item:hover) {
+  background-color: #fff7e6;
+}
+
+:deep(.dropdown-menu .ant-dropdown-menu-item .anticon) {
+  margin-right: 16px;
+  color: #fa8c16;
+}
+
+
+
+:deep(.dropdown-menu .ant-dropdown-menu-item:last-child .anticon) {
+  color: #ff4d4f;
 }
 
 /* 响应式适配 */
