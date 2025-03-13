@@ -7,8 +7,10 @@
 </script>
 
 <style>
-#app {
-  width: 100%;
-  height: 100%;
+.ant-layout-content.content {
+  background-color: #f5f5f7 !important;
+}
+.main-container{
+  background-color: #f5f5f7 !important;
 }
 </style>

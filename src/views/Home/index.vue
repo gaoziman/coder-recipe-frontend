@@ -20,9 +20,9 @@
           <recipe-card :recipe="recipe" />
         </div>
 
-        <!-- 添加新菜谱卡片 -->
-        <div class="recipe-wrapper">
-          <div class="add-recipe-card" @click="goToAddRecipe">
+        <!-- 添加新菜谱卡片 - 修改后的实现 -->
+        <div class="recipe-wrapper no-focus-outline">
+          <div class="add-recipe-card" @click="goToAddRecipe" tabindex="-1">
             <plus-outlined />
             <span>添加新菜谱</span>
           </div>
@@ -51,6 +51,7 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
@@ -109,24 +110,25 @@ const goToAddRecipe = () => {
 
 <style scoped>
 .home-container {
-  padding: 24px 0;
-  background: #fff; /* 将整个容器背景改为白色 */
+  padding: 24px 16px; /* 添加水平内边距确保内容不贴边 */
+  background: #f5f5f7; /* 修改背景为浅灰色 */
 }
 
 .category-filter {
   margin-bottom: 24px;
   padding: 0 0 16px 0;
-  background: #fff;
-  border-bottom: 1px solid #f0f0f0; /* 添加一个细线作为分隔 */
+  background: #f5f5f7; /* 修改为浅灰色 */
+  border-bottom: 1px solid #e8e8e8; /* 调整分隔线颜色 */
 }
 
 /* 自定义Radio按钮组样式 */
 .custom-radio-group :deep(.ant-radio-button-wrapper) {
   border: none;
-  background: #f5f5f5;
+  background: #f0f0f0; /* 略微调深按钮背景色 */
   color: rgba(0, 0, 0, 0.65);
   margin-right: 8px;
-  border-radius: 2px;
+  border-radius: 4px; /* 增大圆角 */
+  transition: all 0.3s; /* 添加过渡效果 */
 }
 
 .custom-radio-group :deep(.ant-radio-button-wrapper:before) {
@@ -137,63 +139,113 @@ const goToAddRecipe = () => {
   background: #fef6e8 !important;
   color: #fa8c16 !important;
   font-weight: normal;
+  box-shadow: 0 2px 6px rgba(250, 140, 22, 0.12); /* 添加轻微阴影 */
 }
 
 .custom-radio-group :deep(.ant-radio-button-wrapper:hover) {
   color: #fa8c16;
+  background: #fff5e6; /* 添加悬停效果 */
 }
 
 .section {
   margin-bottom: 40px;
-  background: #fff; /* 确保每个区域的背景是白色 */
+  background: #f5f5f7; /* 修改为浅灰色 */
+  padding: 0 8px; /* 添加内边距 */
 }
 
 .section-title {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 18px; /* 增大字体 */
+  font-weight: 600; /* 加粗 */
   color: rgba(0, 0, 0, 0.85);
-  margin-bottom: 16px;
+  margin-bottom: 20px; /* 增加下边距 */
   padding-left: 0;
+  position: relative; /* 用于添加装饰元素 */
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 24px;
+  height: 3px;
+  background: #fa8c16; /* 添加橙色下划线装饰 */
+  border-radius: 3px;
 }
 
 .recipe-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 20px; /* 增大间距 */
 }
 
 .recipe-wrapper {
   border-radius: 8px;
   overflow: hidden;
-  background: #fff; /* 确保每个卡片外围的背景是白色 */
+  transition: transform 0.3s;
+}
+
+.recipe-wrapper:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* 移除可能会出现焦点样式的元素的轮廓 */
+.no-focus-outline:focus,
+.no-focus-outline *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.recipe-wrapper:hover {
+  transform: translateY(-4px); /* 添加悬停上浮效果 */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* 添加悬停阴影 */
 }
 
 .add-recipe-card {
   height: 236px;
-  background: #fff;
-  border: 1px dashed #d9d9d9;
+  background: #ffffff; /* 纯白色背景 */
+  border: 1px dashed #d9d9d9; /* 浅灰色虚线边框 */
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.45);
+  color: #8c8c8c; /* 中灰色文字 */
   font-size: 14px;
+  transition: all 0.3s ease;
+  outline: none;
+  position: relative;
 }
 
+/* 图标样式 */
+.add-recipe-card .anticon,
 .add-recipe-card :deep(.anticon) {
-  font-size: 24px;
+  font-size: 24px; /* 调整图标大小 */
   margin-bottom: 8px;
+  color: #bfbfbf; /* 浅灰色图标 */
 }
 
+/* 悬停效果 */
 .add-recipe-card:hover {
-  border-color: #fa8c16;
-  color: #fa8c16;
+  border-color: #bfbfbf; /* 悬停时边框变深灰 */
+  background: #fafafa; /* 悬停时背景略微变灰 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* 轻微阴影 */
 }
 
+.add-recipe-card:hover .anticon,
 .add-recipe-card:hover :deep(.anticon) {
-  color: #fa8c16;
+  color: #8c8c8c; /* 悬停时图标变深灰 */
+}
+
+/* 焦点样式 */
+.add-recipe-card:focus,
+.add-recipe-card:focus-within,
+.add-recipe-card:active {
+  outline: none !important;
+  border-color: #d9d9d9 !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05) !important;
 }
 
 /* 响应式适配 */
@@ -207,11 +259,26 @@ const goToAddRecipe = () => {
   .recipe-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .home-container {
+    padding: 16px 12px; /* 减小内边距 */
+  }
 }
 
 @media (max-width: 576px) {
   .recipe-grid {
     grid-template-columns: 1fr;
+  }
+
+  .custom-radio-group {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .custom-radio-group::-webkit-scrollbar {
+    display: none; /* 隐藏滚动条 */
   }
 }
 </style>
