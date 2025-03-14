@@ -1,11 +1,11 @@
 <template>
   <a-layout-footer class="footer">
+    <!-- 添加波浪分割线 -->
     <div class="footer-wave-container">
-      <svg class="footer-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 140">
-        <path fill="#f5f5f7" fill-opacity="1" d="M0,64L60,69.3C120,75,240,85,360,90.7C480,96,600,96,720,80C840,64,960,32,1080,26.7C1200,21,1320,43,1380,53.3L1440,64L1440,140L1380,140C1320,140,1200,140,1080,140C960,140,840,140,720,140C600,140,480,140,360,140C240,140,120,140,60,140L0,140Z"></path>
+      <svg class="footer-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 140" preserveAspectRatio="none">
+        <path fill="#f5f5f7" fill-opacity="1" d="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,85.3C672,75,768,85,864,96C960,107,1056,117,1152,112C1248,107,1344,85,1392,74.7L1440,64L1440,140L1392,140C1344,140,1248,140,1152,140C1056,140,960,140,864,140C768,140,672,140,576,140C480,140,384,140,288,140C192,140,96,140,48,140L0,140Z"></path>
       </svg>
     </div>
-
     <div class="footer-container">
       <!-- 顶部链接区域 -->
       <div class="footer-links">
@@ -158,16 +158,9 @@ const scrollToTop = () => {
 </script>
 
 <style scoped>
-.footer {
-  background: #f5f5f7;
-  padding: 0;
-  position: relative;
-  margin-top: 40px;
-}
-
 .footer-wave-container {
   position: absolute;
-  top: -140px;
+  top: -140px; /* 调整波浪位置 */
   left: 0;
   width: 100%;
   height: 140px;
@@ -177,6 +170,23 @@ const scrollToTop = () => {
 .footer-wave {
   width: 100%;
   height: 100%;
+}
+
+.footer {
+  background: #f5f5f7;
+  padding: 0;
+  position: relative;
+  margin-top: 60px; /* 增加顶部间距，为波浪留出空间 */
+}
+
+.footer:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: linear-gradient(to right, rgba(250, 140, 22, 0), rgba(250, 140, 22, 0.5), rgba(250, 140, 22, 0));
 }
 
 .footer-container {
