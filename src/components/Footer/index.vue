@@ -114,7 +114,7 @@
 
     <!-- 回到顶部按钮 -->
     <div class="back-to-top" @click="scrollToTop">
-      <arrow-up-outlined />
+      <component :is="UpOutlined" />
     </div>
   </a-layout-footer>
 </template>
@@ -142,7 +142,7 @@ import {
   SafetyOutlined,
   TrophyOutlined,
   CheckCircleOutlined,
-  ArrowUpOutlined
+   UpOutlined
 } from '@ant-design/icons-vue';
 
 // 自动更新年份
@@ -509,27 +509,32 @@ const scrollToTop = () => {
 /* 回到顶部按钮 */
 .back-to-top {
   position: fixed;
-  right: 30px;
-  bottom: 30px;
-  width: 40px;
-  height: 40px;
+  right: 84px; /* 在小助手左侧 */
+  bottom: 24px;
+  width: 48px; /* 与小助手按钮宽度一致 */
+  height: 48px; /* 与小助手按钮高度一致 */
   background: #fff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fa8c16;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  z-index: 999;
+  z-index: 99;
   transition: all 0.3s;
 }
 
 .back-to-top:hover {
   background: #fa8c16;
   color: #fff;
-  transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(250, 140, 22, 0.3);
+  transform: scale(1.05); /* 使用缩放效果，与小助手保持一致 */
+  box-shadow: 0 6px 20px rgba(250, 140, 22, 0.3);
+}
+
+/* 确保回到顶部按钮中的图标大小适当 */
+.back-to-top .anticon {
+  font-size: 20px; /* 调整图标大小 */
 }
 
 /* 响应式设计 */
