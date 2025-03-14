@@ -47,7 +47,7 @@ const routes: RouteRecordRaw[] = [
             // {
             //     path: '/ingredients/:id',
             //     name: 'IngredientDetail',
-            //     component: () => import('@/views/Ingredients/Detail.vue'),
+            //     component: () => import('@/views/Ingredients/CollectionDetail.vue'),
             //     meta: {
             //         title: '食材详情',
             //         requiresAuth: true
@@ -111,6 +111,25 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('@/views/Tip/TipDetail.vue'),
                 meta: {
                     title: '小贴士详情',
+                    requiresAuth: false
+                }
+            },
+            // 合集相关路由
+            {
+                path: '/collections',
+                name: 'Collections',
+                component: () => import('@/views/Collection/index.vue'),
+                meta: {
+                    title: '精选合集',
+                    requiresAuth: false
+                }
+            },
+            {
+                path: '/collections/:id',
+                name: 'CollectionDetail',
+                component: () => import('@/views/Collection/CollectionDetail.vue'),
+                meta: {
+                    title: '合集详情',
                     requiresAuth: false
                 }
             }
