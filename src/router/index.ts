@@ -17,24 +17,24 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: false
                 }
             },
-            // {
-            //     path: '/recipes',
-            //     name: 'Recipes',
-            //     component: () => import('@/views/Recipes/index.vue'),
-            //     meta: {
-            //         title: '我的菜谱',
-            //         requiresAuth: true
-            //     }
-            // },
-            // {
-            //     path: '/recipes/add',
-            //     name: 'AddRecipe',
-            //     component: () => import('@/views/Recipes/Add.vue'),
-            //     meta: {
-            //         title: '新建菜谱',
-            //         requiresAuth: true
-            //     }
-            // },
+            {
+                path: '/recipes',
+                name: 'Recipes',
+                component: () => import('@/views/Recipe/index.vue'),
+                meta: {
+                    title: '我的菜谱',
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/recipes/add',
+                name: 'AddRecipe',
+                component: () => import('@/views/Recipe/Add.vue'),
+                meta: {
+                    title: '新建菜谱',
+                    requiresAuth: true
+                }
+            },
             // {
             //     path: '/ingredients',
             //     name: 'Ingredients',
@@ -76,7 +76,7 @@ const routes: RouteRecordRaw[] = [
                 path: 'ProfileSidebar/profile',
                 name: 'UserProfile',
                 component: () => import('@/views/User/index.vue'),
-                meta: { title: '个人中心', requiresAuth: true }
+                meta: {title: '个人中心', requiresAuth: true}
             },
             {
                 path: '/settings',
@@ -94,6 +94,24 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     title: '帮助与反馈',
                     requiresAuth: true
+                }
+            },
+            {
+                path: '/tips',
+                name: 'Tips',
+                component: () => import('@/views/Tip/index.vue'),
+                meta: {
+                    title: '烹饪小贴士',
+                    requiresAuth: false
+                }
+            },
+            {
+                path: '/tips/:id',
+                name: 'TipDetail',
+                component: () => import('@/views/Tip/TipDetail.vue'),
+                meta: {
+                    title: '小贴士详情',
+                    requiresAuth: false
                 }
             }
         ]
