@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* 重置一些基础样式 */
 body {
   margin: 0;
@@ -6,7 +10,7 @@ body {
   'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #fff;
+  background-color: #f5f5f7;
 }
 
 /* Ant Design 样式定制 */
@@ -449,4 +453,38 @@ button.auth-login-btn:hover {
 .ant-message-info .anticon,
 .ant-message-success .anticon {
   color: var(--primary-color) !important;
+}
+
+/* 添加到您的全局样式文件中 (App.vue 或 main.css) */
+
+/* 隐藏 Ant Design Vue 的默认回到顶部按钮 */
+.ant-back-top,
+.ant-float-btn-default {
+  display: none !important;
+}
+
+/* 确保我们自定义的回到顶部按钮正常显示 */
+.back-to-top {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fa8c16;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  z-index: 999;
+  transition: all 0.3s;
+}
+
+.back-to-top:hover {
+  background: #fa8c16;
+  color: #fff;
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(250, 140, 22, 0.3);
 }

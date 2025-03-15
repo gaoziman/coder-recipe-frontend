@@ -57,7 +57,7 @@
         </a-button>
       </div>
       <div class="recipe-grid">
-        <div class="recipe-wrapper" v-for="recipe in recommendedRecipes" :key="recipe.id">
+        <div class="recipe-wrapper" v-for="recipe in recommendedRecipes" :key="recipe.id" @click="viewRecipe(recipe.id)">
           <recipe-card :recipe="recipe" />
         </div>
 
@@ -91,7 +91,7 @@
       </div>
     </div>
 
-    <!-- 烹饪技巧与小贴士 -->
+    <!-- 烹饪技巧与小贴士 - 完善版 -->
     <div class="section tips-section">
       <div class="section-header">
         <h2 class="section-title">烹饪小贴士</h2>
@@ -99,58 +99,108 @@
           更多 <right-outlined />
         </a-button>
       </div>
+
+      <!-- 添加一个标签选择器 -->
+      <div class="tip-tags">
+        <a-tag
+            v-for="(tag, index) in tipTags"
+            :key="index"
+            :color="activeTag === tag ? '#fa8c16' : ''"
+            @click="filterTipsByTag(tag)"
+            class="tip-tag"
+        >
+          {{ tag }}
+        </a-tag>
+      </div>
+
       <div class="tips-grid">
-        <div class="tip-card" v-for="tip in cookingTips" :key="tip.id" @click="viewTip(tip.id)">
+        <div class="tip-card" v-for="tip in filteredCookingTips" :key="tip.id" @click="viewTip(tip.id)">
           <div class="tip-icon">
             <component :is="tip.icon" />
           </div>
           <div class="tip-content">
             <h3 class="tip-title">{{ tip.title }}</h3>
             <p class="tip-desc">{{ tip.description }}</p>
+            <div class="tip-footer">
+              <span class="tip-category">{{ tip.category }}</span>
+              <span class="tip-likes">{{ tip.likes }} 人觉得有用</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 添加视频教程区块 -->
+      <div class="video-tutorial">
+        <h3 class="video-tutorial-title">本周精选教学视频</h3>
+        <div class="video-preview" @click="watchTutorial">
+          <div class="video-thumbnail" :style="{ backgroundImage: `url(https://images.unsplash.com/photo-1556909114-44e3e9e23b11)` }">
+            <div class="play-button">
+              <play-circle-outlined />
+            </div>
+          </div>
+          <div class="video-info">
+            <h4 class="video-title">刀工基础：三种最实用的蔬菜切法</h4>
+            <p class="video-desc">掌握这些基础切法，提升烹饪效率和菜品质感</p>
+            <div class="video-meta">
+              <clock-outlined /> 8分钟
+              <eye-outlined class="ml-12" /> 2,458次观看
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 社区人气厨师 -->
-    <div class="section chefs-section">
-      <div class="section-header">
-        <h2 class="section-title">人气厨师</h2>
-        <a-button type="link" class="view-more-btn" @click="viewMoreChefs">
-          更多 <right-outlined />
-        </a-button>
+
+    <!-- 智能助手浮动按钮 -->
+    <div class="ai-assistant-button" @click="toggleAssistant">
+      <robot-outlined v-if="!assistantOpen" />
+      <close-outlined v-else />
+    </div>
+
+    <div v-if="assistantOpen" class="ai-assistant-panel">
+      <div class="assistant-header">
+        <robot-outlined />
+        <span>厨房小帮手</span>
       </div>
-      <div class="chefs-grid">
-        <div class="chef-card" v-for="chef in popularChefs" :key="chef.id" @click="viewChefProfile(chef.id)">
-          <div class="chef-avatar" :style="{ backgroundImage: `url(${chef.avatarUrl})` }"></div>
-          <div class="chef-info">
-            <h3 class="chef-name">{{ chef.name }}</h3>
-            <p class="chef-bio">{{ chef.bio }}</p>
-            <div class="chef-stats">
-              <span class="chef-recipes">{{ chef.recipeCount }}个菜谱</span>
-              <span class="chef-followers">{{ chef.followers }}个粉丝</span>
-            </div>
-          </div>
+      <div class="assistant-content">
+        <div class="assistant-message">
+          你好！我是你的厨房小帮手。有什么可以帮到你的吗？
         </div>
+        <div class="assistant-suggestions">
+          <a-button size="small" @click="askQuestion('如何处理剩菜剩饭？')">如何处理剩菜剩饭？</a-button>
+          <a-button size="small" @click="askQuestion('替代食材推荐')">替代食材推荐</a-button>
+          <a-button size="small" @click="askQuestion('今天吃什么？')">今天吃什么？</a-button>
+        </div>
+      </div>
+      <div class="assistant-input">
+        <a-input placeholder="输入你的问题..." v-model:value="assistantQuery" @pressEnter="sendQuery" />
+        <a-button type="primary" shape="circle" @click="sendQuery">
+          <send-outlined />
+        </a-button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, computed} from 'vue'
 import {
   PlusOutlined,
   RightOutlined,
-  FireOutlined,
-  ClockOutlined,
-  StarOutlined,
-  BulbOutlined,
   NotificationOutlined,
-  CloseOutlined
+  CloseOutlined,
+  PlayCircleOutlined,
+  EyeOutlined,
+  RobotOutlined,
+  SendOutlined
 } from '@ant-design/icons-vue'
 import { useRouter } from 'vue-router'
 import RecipeCard from '@/components/RecipeCard/index.vue'
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
+
+// 设置中文语言
+dayjs.locale('zh-cn')
 
 const router = useRouter()
 const showAnnouncement = ref(true)
@@ -228,61 +278,100 @@ const popularCollections = ref([
   }
 ])
 
-// 烹饪小贴士
+// 小贴士标签和筛选功能
+const tipTags = ref(['全部', '食材处理', '烹饪技巧', '厨房管理', '营养搭配'])
+const activeTag = ref('全部')
+
+// 扩展小贴士数据
 const cookingTips = ref([
   {
     id: 1,
     title: '正确处理蔬菜',
-    description: '如何洗净、切割和保存蔬菜以保持最佳口感和营养',
-    icon: 'bulb-outlined'
+    description: '如何洗净、切割和保存蔬菜以保持最佳口感和营养。先用流动水冲洗蔬菜，再浸泡5分钟去除农药残留。',
+    icon: 'bulb-outlined',
+    category: '食材处理',
+    likes: 328
   },
   {
     id: 2,
     title: '掌握火候技巧',
-    description: '了解不同食材的最佳烹饪温度和时间，做出完美菜品',
-    icon: 'fire-outlined'
+    description: '了解不同食材的最佳烹饪温度和时间，做出完美菜品。肉类煎制前要回温，鱼类宜用中小火慢煎保持鲜嫩。',
+    icon: 'fire-outlined',
+    category: '烹饪技巧',
+    likes: 256
   },
   {
     id: 3,
     title: '高效厨房管理',
-    description: '如何规划烹饪流程，节省时间并保持厨房整洁',
-    icon: 'clock-outlined'
+    description: '如何规划烹饪流程，节省时间并保持厨房整洁。建立"边做边清洁"的习惯，准备食材时按烹饪顺序排列。',
+    icon: 'clock-outlined',
+    category: '厨房管理',
+    likes: 187
   },
   {
     id: 4,
     title: '调味品搭配秘诀',
-    description: '掌握调味品的平衡搭配，让家常菜提升到餐厅水准',
-    icon: 'star-outlined'
+    description: '掌握调味品的平衡搭配，让家常菜提升到餐厅水准。酸甜苦辣咸五味平衡是提升菜品层次感的关键。',
+    icon: 'star-outlined',
+    category: '营养搭配',
+    likes: 243
+  },
+  {
+    id: 5,
+    title: '油温判断方法',
+    description: '学会不用温度计也能准确判断油温。筷尖入油有气泡缓慢上升是中温，筷尖周围气泡快速上升是高温。',
+    icon: 'fire-outlined',
+    category: '烹饪技巧',
+    likes: 215
+  },
+  {
+    id: 6,
+    title: '食材保鲜延长法',
+    description: '几种简单方法让你的蔬菜水果保鲜期延长一倍。将绿叶菜用厨房纸包裹后放入保鲜袋，排出空气后冷藏。',
+    icon: 'bulb-outlined',
+    category: '食材处理',
+    likes: 198
   }
 ])
 
-// 人气厨师数据
-const popularChefs = ref([
-  {
-    id: 1,
-    name: '王大厨',
-    avatarUrl: 'https://images.unsplash.com/photo-1583394838336-acd977736f90',
-    bio: '专注家常菜20年，擅长川菜',
-    recipeCount: 48,
-    followers: 1254
-  },
-  {
-    id: 2,
-    name: '李老师',
-    avatarUrl: 'https://images.unsplash.com/photo-1581299894007-aaa50297cf16',
-    bio: '健康饮食倡导者，素食达人',
-    recipeCount: 36,
-    followers: 986
-  },
-  {
-    id: 3,
-    name: '张师傅',
-    avatarUrl: 'https://images.unsplash.com/photo-1566554273541-37a9ca77b91f',
-    bio: '米其林星级餐厅大厨，专注中西融合',
-    recipeCount: 27,
-    followers: 2134
+
+// 智能助手相关状态
+const assistantOpen = ref(false)
+const assistantQuery = ref('')
+
+// 筛选小贴士的方法
+const filterTipsByTag = (tag) => {
+  activeTag.value = tag
+}
+
+// 计算属性：根据标签筛选小贴士
+const filteredCookingTips = computed(() => {
+  if (activeTag.value === '全部') {
+    return cookingTips.value
+  } else {
+    return cookingTips.value.filter(tip => tip.category === activeTag.value)
   }
-])
+})
+
+// 切换助手面板
+const toggleAssistant = () => {
+  assistantOpen.value = !assistantOpen.value
+}
+
+// 发送问题
+const sendQuery = () => {
+  if (assistantQuery.value.trim()) {
+    // 这里可以接入实际的AI服务
+    console.log('发送问题:', assistantQuery.value)
+    assistantQuery.value = ''
+  }
+}
+
+// 点击预设问题
+const askQuestion = (question) => {
+  assistantQuery.value = question
+  sendQuery()
+}
 
 // 页面交互方法
 const goToAddRecipe = () => {
@@ -290,11 +379,11 @@ const goToAddRecipe = () => {
 }
 
 const exploreTopRecipes = () => {
-  router.push('/recipes/top')
+  router.push('/recipes/explore?sort=popular')
 }
 
 const viewMoreRecommended = () => {
-  router.push('/recipes/recommended')
+  router.push('/recipes/explore')
 }
 
 const viewMoreSeasonal = () => {
@@ -317,16 +406,19 @@ const viewTip = (id) => {
   router.push(`/tips/${id}`)
 }
 
-const viewMoreChefs = () => {
-  router.push('/chefs')
-}
-
-const viewChefProfile = (id) => {
-  router.push(`/chefs/${id}`)
-}
 
 const filterByIngredient = (name) => {
-  router.push(`/recipes?ingredient=${name}`)
+  router.push(`/recipes?explore=${name}`)
+}
+
+// 观看教程视频
+const watchTutorial = () => {
+  router.push('/tutorials/knife-skills')
+}
+
+// 查看食谱详情
+const viewRecipe = (id) => {
+  router.push(`/recipes/${id}`) // 确保这个方法被调用
 }
 
 // 检查公告是否已关闭
@@ -650,7 +742,26 @@ onMounted(() => {
   opacity: 0.9;
 }
 
-/* 烹饪技巧区 */
+/* 小贴士区域优化样式 */
+.tips-section {
+  position: relative;
+  background: linear-gradient(to bottom right, #fff, #fafafa);
+}
+
+.tip-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.tip-tag {
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 16px;
+  transition: all 0.3s;
+}
+
 .tips-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -665,6 +776,9 @@ onMounted(() => {
   background: #f9f9f9;
   cursor: pointer;
   transition: all 0.3s;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid #f0f0f0;
 }
 
 .tip-card:hover {
@@ -704,73 +818,212 @@ onMounted(() => {
   line-height: 1.5;
 }
 
-/* 人气厨师区 */
-.chefs-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.chef-card {
+.tip-footer {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.tip-category {
+  color: #fa8c16;
+  background: rgba(250, 140, 22, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.tip-likes {
+  color: rgba(0, 0, 0, 0.45);
+  display: flex;
   align-items: center;
-  padding: 20px;
-  border-radius: 8px;
-  background: #f9f9f9;
-  transition: all 0.3s;
-  cursor: pointer;
 }
 
-.chef-card:hover {
-  background: #fff5e6;
-  transform: translateY(-2px);
+.tip-likes::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fa8c16"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+  background-size: contain;
+  margin-right: 4px;
 }
 
-.chef-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-  margin-bottom: 12px;
-  border: 3px solid white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* 视频教程样式 */
+.video-tutorial {
+  margin-top: 30px;
+  border-top: 1px dashed #f0f0f0;
+  padding-top: 20px;
 }
 
-.chef-info {
-  text-align: center;
-  width: 100%;
-}
-
-.chef-name {
-  margin: 0 0 4px 0;
+.video-tutorial-title {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
+  margin-bottom: 16px;
   color: rgba(0, 0, 0, 0.85);
 }
 
-.chef-bio {
-  margin: 0 0 8px 0;
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.65);
-  line-height: 1.5;
+.video-preview {
+  display: flex;
+  gap: 16px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-.chef-stats {
+.video-preview:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.video-thumbnail {
+  width: 240px;
+  height: 135px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 16px;
+  color: white;
+  font-size: 24px;
+  opacity: 0.8;
+  transition: all 0.3s;
+}
+
+.video-preview:hover .play-button {
+  opacity: 1;
+  background: rgba(250, 140, 22, 0.8);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-info {
+  padding: 16px;
+  flex: 1;
+}
+
+.video-title {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.video-desc {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.video-meta {
   font-size: 12px;
   color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+}
+
+.ml-12 {
+  margin-left: 12px;
+}
+
+.meal-empty .anticon {
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+/* 智能助手样式 */
+.ai-assistant-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fa8c16;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 16px rgba(250, 140, 22, 0.3);
+  cursor: pointer;
+  z-index: 99;
+  transition: all 0.3s;
+}
+
+.ai-assistant-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(250, 140, 22, 0.4);
+}
+
+.ai-assistant-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 84px;
+  width: 320px;
+  height: 400px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.assistant-header {
+  padding: 12px 16px;
+  background: #fa8c16;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.assistant-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.assistant-message {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 12px 12px 12px 0;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.assistant-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.assistant-input {
+  padding: 12px 16px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 12px;
 }
 
 /* 响应式布局 */
-@media (max-width: 1200px) {
-  .recipe-grid, .collections-grid, .chefs-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
 
 @media (max-width: 992px) {
   .featured-banner {
@@ -786,8 +1039,13 @@ onMounted(() => {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .tips-grid, .chefs-grid {
-    grid-template-columns: 1fr;
+  .video-preview {
+    flex-direction: column;
+  }
+
+  .video-thumbnail {
+    width: 100%;
+    height: 180px;
   }
 }
 
@@ -806,6 +1064,15 @@ onMounted(() => {
 
   .announcement-text {
     font-size: 13px;
+  }
+
+  .video-preview {
+    flex-direction: column;
+  }
+
+  .video-thumbnail {
+    width: 100%;
+    height: 180px;
   }
 }
 
@@ -832,6 +1099,17 @@ onMounted(() => {
 
   .announcement-text {
     font-size: 12px;
+  }
+
+  .tip-tags {
+    overflow-x: auto;
+    padding-bottom: 8px;
+    flex-wrap: nowrap;
+  }
+
+  .ai-assistant-panel {
+    width: calc(100% - 32px);
+    right: 16px;
   }
 }
 </style>

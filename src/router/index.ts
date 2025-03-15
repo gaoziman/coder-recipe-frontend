@@ -35,6 +35,24 @@ const routes: RouteRecordRaw[] = [
                     requiresAuth: true
                 }
             },
+            {
+                path: '/recipes/:id',
+                name: 'RecipeDetail',
+                component: () => import('@/views/Recipe/RecipeDetail.vue'),
+                meta: {
+                    title: '菜谱详情',
+                    requiresAuth: false
+                }
+            },
+            {
+                path: '/recipes/explore',
+                name: 'RecipeList',
+                component: () => import('@/views/Recipe/RecipeList.vue'),
+                meta: {
+                    title: '探索美食',
+                    requiresAuth: false
+                }
+            },
             // {
             //     path: '/ingredients',
             //     name: 'Ingredients',
@@ -152,16 +170,17 @@ const routes: RouteRecordRaw[] = [
             title: '注册',
             requiresAuth: false
         }
-    },
+    }
+    */
     {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
-        component: () => import('@/views/NotFound/index.vue'),
+        component: () => import('@/views/404/NotFound.vue'),
         meta: {
             title: '404',
             requiresAuth: false
         }
-    }*/
+    }
 ]
 
 const router = createRouter({
