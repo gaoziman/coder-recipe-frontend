@@ -237,36 +237,166 @@ const handleLogout = () => {
   color: #fa9d32 !important;
 }
 
-/* 修改菜单样式，去掉下划线，只用颜色来表示选中状态 */
+/* 基础菜单容器样式 */
 .custom-menu {
+  border-bottom: none !important;
+  position: relative;
+}
+
+.custom-menu:deep(.ant-menu-horizontal) {
   border-bottom: none;
-  line-height: 62px;
 }
 
-/* 增加菜单项字体大小 */
+/* 菜单项基础样式 */
 .custom-menu :deep(.ant-menu-item) {
-  font-size: 15px;
   padding: 0 16px;
+  margin: 0 4px;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 15px;
+  transition: all 0.3s ease;
+  border-bottom: none !important;
+  position: relative;
 }
 
+/* 菜单项悬停效果 */
+.custom-menu :deep(.ant-menu-item:hover) {
+  color: #fa8c16;
+  border-bottom-color: transparent !important;
+}
+
+/* 选中菜单项样式 */
 .custom-menu :deep(.ant-menu-item-selected) {
   color: #fa8c16 !important;
   font-weight: 500;
+  border-bottom-color: transparent !important;
 }
 
-/* 重要：移除下划线 */
-.custom-menu :deep(.ant-menu-item::after) {
-  display: none !important;
+/* 创建圆点指示器样式 */
+.custom-menu :deep(.ant-menu-item)::before {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background-color: #fa8c16;
+  border-radius: 3px;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+.custom-menu :deep(.ant-menu-item:hover)::before {
+  width: 12px;
+  opacity: 0.5;
+}
+
+.custom-menu :deep(.ant-menu-item-selected)::before {
+  width: 24px;
+  opacity: 1;
+}
+
+/* 添加顶部微妙指示器 */
+.custom-menu :deep(.ant-menu-item)::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background-color: #fa8c16;
+  border-radius: 3px;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+.custom-menu :deep(.ant-menu-item-selected)::after {
+  width: 12px;
+  opacity: 0.5;
+}
+
+/* 覆盖所有Ant Design默认样式 */
+:deep(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item::after),
+:deep(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-active::after),
+:deep(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-open::after),
+:deep(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected::after),
+:deep(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover::after),
+:deep(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu::after),
+:deep(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-active::after),
+:deep(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-open::after),
+:deep(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-selected::after),
+:deep(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover::after) {
   border-bottom: none !important;
+  background-color: transparent !important;
 }
 
-.custom-menu :deep(.ant-menu-horizontal) {
-  border-bottom: none;
+/* 添加文字阴影和微妙缩放效果 */
+.custom-menu :deep(.ant-menu-item-selected) span {
+  display: inline-block;
+  transform: scale(1.05);
+  text-shadow: 0 0 0.5px rgba(250, 140, 22, 0.3);
+  transition: transform 0.3s ease;
 }
 
-/* 鼠标悬停效果 */
-.custom-menu :deep(.ant-menu-item:hover) {
-  color: #fa8c16 !important;
+/* 创建轻微的背景效果 */
+.custom-menu :deep(.ant-menu-item) {
+  overflow: hidden;
+}
+
+.custom-menu :deep(.ant-menu-item)::before {
+  content: '';
+  position: absolute;
+  top: auto;
+  bottom: 6px;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background-color: #fa8c16;
+  border-radius: 3px;
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+  z-index: 1;
+}
+
+.custom-menu :deep(.ant-menu-item-selected)::before {
+  width: 24px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .custom-menu :deep(.ant-menu-item) {
+    padding: 0 12px;
+    margin: 0 2px;
+  }
+
+  .custom-menu :deep(.ant-menu-item-selected)::before {
+    width: 20px;
+  }
+
+  .custom-menu :deep(.ant-menu-item-selected)::after {
+    width: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-menu :deep(.ant-menu-item) {
+    padding: 0 8px;
+    margin: 0 1px;
+    font-size: 14px;
+  }
+
+  .custom-menu :deep(.ant-menu-item-selected)::before {
+    width: 16px;
+  }
+
+  .custom-menu :deep(.ant-menu-item-selected)::after {
+    width: 8px;
+  }
+
+  .custom-menu :deep(.ant-menu-item-selected) span {
+    transform: scale(1.03);
+  }
 }
 
 /* 修改搜索按钮颜色为橙色 */
