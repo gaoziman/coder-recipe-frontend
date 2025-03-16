@@ -16,7 +16,7 @@
       <div class="navigation-buttons">
         <router-link to="/" class="nav-button" :class="{ active: currentRoutePath === '/' }">首页</router-link>
         <router-link to="/recipes" class="nav-button" :class="{ active: currentRoutePath.startsWith('/recipes') }">菜谱</router-link>
-        <router-link to="/ingredients" class="nav-button" :class="{ active: currentRoutePath.startsWith('/ingredients') }">食材</router-link>
+        <router-link to="/ai" class="nav-button" :class="{ active: currentRoutePath.startsWith('/ai') }">AI搭配</router-link>
         <router-link to="/collections" class="nav-button" :class="{ active: currentRoutePath.startsWith('/collections') }">合集</router-link>
         <router-link to="/tips" class="nav-button" :class="{ active: currentRoutePath.startsWith('/tips') }">烹饪技巧</router-link>
       </div>

@@ -12,6 +12,16 @@ const routes: Array<RouteRecordRaw> = [
             requiresAuth: false
         }
     },
+
+    {
+        path: '/ai',
+        name: 'KitchenAssistant',
+        component: () => import('@/pages/kitchenai/KitchenAssistant.vue'),
+        meta: {
+            title: 'AI食材搭配',
+            requiresAuth: false
+        }
+    },
     // {
     //     path: '/recipes',
     //     name: 'Recipes',
@@ -41,7 +51,7 @@ const routes: Array<RouteRecordRaw> = [
     //     name: 'CookingTips',
     //     component: () => import('@/pages/tips/CookingTipsList.vue')
     // },
-    // {
+    // {AI食材搭配
     //     path: '/search',
     //     name: 'Search',
     //     component: () => import('@/pages/search/SearchResults.vue')
