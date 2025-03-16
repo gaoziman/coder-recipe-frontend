@@ -15,7 +15,11 @@ const routes: Array<RouteRecordRaw> = [
     // {
     //     path: '/recipes',
     //     name: 'Recipes',
-    //     component: () => import('@/pages/recipes/RecipeList.vue')
+    //     component: () => import('@/pages/recipes/RecipesList.vue'),
+    //     meta: {
+    //         title: '菜谱列表',
+    //         requiresAuth: false
+    //     }
     // },
     // {
     //     path: '/recipes/:id',
@@ -61,24 +65,78 @@ const routes: Array<RouteRecordRaw> = [
                     requiresAuth: true
                 }
             },
-            // {
-            //     path: 'favorites',
-            //     name: 'UserFavorites',
-            //     component: () => import('@/pages/user/UserFavorites.vue'),
-            //     meta: { requiresAuth: true }
-            // },
-            // {
-            //     path: 'settings',
-            //     name: 'UserSettings',
-            //     component: () => import('@/pages/user/UserSettings.vue'),
-            //     meta: { requiresAuth: true }
-            // },
-            // {
-            //     path: 'recipes',
-            //     name: 'UserRecipes',
-            //     component: () => import('@/pages/user/UserRecipes.vue'),
-            //     meta: { requiresAuth: true }
-            // }
+            {
+                path: 'recipes',
+                name: 'Recipes',
+                component: () => import('@/pages/user/MyRecipes.vue'),
+                meta: {
+                    title: '我的菜谱',
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'favorites',
+                name: 'UserFavorites',
+                component: () => import('@/pages/user/UserFavorites.vue'),
+                meta: {
+                    title: '我的收藏',
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'ingredients',
+                name: 'IngredientManagement',
+                component: () => import('@/pages/user/IngredientManagement.vue'),
+                meta: {
+                    title: '食材管理',
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'shopping',
+                name: 'ShoppingList',
+                component: () => import('@/pages/user/ShoppingList.vue'),
+                meta: {
+                    title: '购物清单',
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'statistics',
+                name: 'DataStatistics',
+                component: () => import('@/pages/user/DataStatistics.vue'),
+                meta: {
+                    title: '数据统计',
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'history',
+                name: 'BrowseHistory',
+                component: () => import('@/pages/user/BrowseHistory.vue'),
+                meta: {
+                    title: '浏览历史',
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'notification',
+                name: 'NotificationSettings',
+                component: () => import('@/pages/settings/NotificationSettings.vue'),
+                meta: {
+                    title: '通知设置',
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'privacy',
+                name: 'PrivacySettings',
+                component: () => import('@/pages/settings/PrivacySettings.vue'),
+                meta: {
+                    title: '隐私设置',
+                    requiresAuth: true
+                }
+            }
         ]
     },
     // 创建菜谱路由 - 需要登录权限

@@ -336,3 +336,137 @@ a:hover {
   border-color: var(--error-color);
   box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
 }
+
+/* InputNumber组件样式 */
+.ant-input-number:hover,
+.ant-input-number-focused,
+.ant-input-number:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(255, 153, 102, 0.2) !important;
+}
+
+.ant-input-number-handler:hover .ant-input-number-handler-up-inner,
+.ant-input-number-handler:hover .ant-input-number-handler-down-inner {
+  color: var(--primary-color) !important;
+}
+
+/* Select组件下拉框激活和悬停状态 */
+.ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(255, 153, 102, 0.2) !important;
+}
+
+/* DatePicker组件样式 */
+.ant-picker:hover,
+.ant-picker-focused {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-picker-focused {
+  box-shadow: 0 0 0 2px rgba(255, 153, 102, 0.2) !important;
+}
+
+/* 日期选择面板里的各种状态 */
+.ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner,
+.ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner,
+.ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner {
+  background-color: var(--primary-color) !important;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-picker-header-view button:hover {
+  color: var(--primary-color) !important;
+}
+
+.ant-picker-today-btn {
+  color: var(--primary-color) !important;
+}
+
+.ant-picker-time-panel-column > li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner {
+  background: var(--tag-background) !important;
+  color: var(--primary-color) !important;
+}
+
+/* 表单项错误状态保持红色 */
+.ant-form-item-has-error .ant-input-number:focus,
+.ant-form-item-has-error .ant-picker:focus,
+.ant-form-item-has-error .ant-select-focused .ant-select-selector {
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2) !important;
+  border-color: var(--error-color) !important;
+}
+
+
+/* 图片上传组件样式 */
+.ant-upload.ant-upload-select-picture-card,
+.ant-upload-list-picture-card-container .ant-upload-list-item-container {
+  border-color: var(--primary-color) !important;
+  border-style: dashed !important;
+  border-width: 1px !important;
+  border-radius: 8px !important;
+  color: var(--primary-color) !important;
+}
+
+.ant-upload.ant-upload-select-picture-card:hover,
+.ant-upload-list-picture-card-container:hover .ant-upload-list-item-container {
+  border-color: var(--primary-hover) !important;
+  color: var(--primary-hover) !important;
+}
+
+/* 上传按钮图标颜色 */
+.ant-upload.ant-upload-select-picture-card > .ant-upload {
+  color: var(--primary-color) !important;
+}
+
+.ant-upload.ant-upload-select-picture-card:hover > .ant-upload {
+  color: var(--primary-hover) !important;
+}
+
+/* 上传列表项操作图标 */
+.ant-upload-list-picture-card .ant-upload-list-item-actions .anticon {
+  color: #fff !important;
+}
+
+.ant-upload-list-picture-card .ant-upload-list-item-actions .anticon:hover {
+  color: #fff !important;
+  opacity: 0.85;
+}
+
+/* 图片预览遮罩 */
+.ant-image-preview-mask {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 上传进度条 */
+.ant-upload-list-item-progress .ant-progress-bg {
+  background-color: var(--primary-color) !important;
+}
+/* 修改加载指示器(Spin)颜色 */
+.ant-spin-dot-item {
+  background-color: #f6925c !important;
+}
+
+.ant-spin-text {
+  color: #f6925c !important;
+}
+
+.ant-spin-nested-loading .ant-spin-dot {
+  background-color: #f6925c !important;
+}
+
+/* 搜索按钮颜色 */
+.ant-input-search-button {
+  background-color: #f6925c !important;
+  border-color: #f6925c !important;
+}
+
+.ant-input-search-button:hover {
+  background-color: #ff8b48 !important;
+  border-color: #ff8b48 !important;
+}

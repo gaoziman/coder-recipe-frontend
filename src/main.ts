@@ -25,6 +25,8 @@ app.use(router)
 app.use(pinia)
 app.use(Antd)
 
+
+
 // 挂载应用
 app.mount('#app')
 

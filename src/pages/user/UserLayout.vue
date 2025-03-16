@@ -107,10 +107,6 @@
               <div class="menu-section">
                 <!-- 将账号设置移到菜单内部 -->
                 <div class="settings-title">账号设置</div>
-                <a-menu-item key="security" class="menu-item">
-                  <template #icon><lock-outlined /></template>
-                  <router-link to="/user/security">安全设置</router-link>
-                </a-menu-item>
                 <a-menu-item key="notification" class="menu-item">
                   <template #icon><notification-outlined /></template>
                   <router-link to="/user/notification">通知设置</router-link>
@@ -118,10 +114,6 @@
                 <a-menu-item key="privacy" class="menu-item">
                   <template #icon><safety-outlined /></template>
                   <router-link to="/user/privacy">隐私设置</router-link>
-                </a-menu-item>
-                <a-menu-item key="logout" class="menu-item">
-                  <template #icon><logout-outlined /></template>
-                  <router-link to="/logout">退出登录</router-link>
                 </a-menu-item>
               </div>
             </a-menu>
