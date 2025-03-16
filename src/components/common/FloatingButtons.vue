@@ -1,5 +1,5 @@
 <template>
-  <div class="floating-buttons">
+  <div class="floating-buttons" :style="buttonStyle">
     <div class="assistant-wrapper">
       <!-- 厨房智能助手弹窗 - 改为绝对定位 -->
       <div class="assistant-dialog" v-if="assistantVisible">

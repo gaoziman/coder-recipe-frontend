@@ -1,0 +1,61 @@
+/* src/assets/styles/variables.css */
+:root {
+    /* 网站主色调 */
+    --primary-color: #FF9966;
+    --primary-hover: #FF8C66;
+    --primary-gradient-start: #FF9966;
+    --primary-gradient-end: #FF5E62;
+    --background-color: #FFF8F0;
+    --card-background: #FFFFFF;
+    --tag-background: #FFEBE0;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-tertiary: #999999; /* 添加自我创建的变量 */
+    --text-light: #999999;
+    --container-width: 1140px;
+
+    /* 从我创建的variables.css中添加有用的变量 */
+    --border-color: #eeeeee;
+
+    /* 状态颜色 */
+    --success-color: #52c41a;
+    --warning-color: #faad14;
+    --error-color: #ff4d4f;
+    --info-color: #1890ff;
+
+    /* 阴影 */
+    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+    /* 圆角 */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 16px;
+    --border-radius-pill: 9999px;
+
+    /* 间距 */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 48px;
+
+    /* 动画时间 */
+    --transition-fast: 0.2s;
+    --transition-medium: 0.3s;
+    --transition-slow: 0.5s;
+
+    /* 字体 */
+    --font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+
+    /* 字体大小 */
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-md: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-xxl: 24px;
+    --font-size-xxxl: 32px;
+}

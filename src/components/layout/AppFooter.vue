@@ -1,187 +1,332 @@
+<!-- src/components/layout/AppFooter.vue -->
 <template>
   <a-layout-footer class="app-footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-section">
-          <div class="logo-area">
-            <restaurant-outlined theme="filled" class="footer-logo-icon" />
-            <h3 class="footer-logo-text">味见好时光</h3>
-          </div>
-          <p class="slogan">记录美味，分享生活，让每一顿饭都成为难忘的时光</p>
-          <div class="social-links">
-            <a href="#" class="social-icon"><weibo-outlined /></a>
-            <a href="#" class="social-icon"><wechat-outlined /></a>
-            <a href="#" class="social-icon"><instagram-outlined /></a>
-            <a href="#" class="social-icon"><zhihu-outlined /></a>
-          </div>
+    <div class="container footer-content">
+      <div class="footer-top">
+        <div class="footer-logo">
+          <span class="logo-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 3L17 9L21 10L17 12L15 18" stroke="#F0884C" stroke-width="2" stroke-linecap="round"/>
+              <path d="M9 3L7 9L3 10L7 12L9 18" stroke="#F0884C" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <h3 class="logo-text">味见好时光</h3>
         </div>
+        <div class="footer-slogan">记录美味，分享生活，让每一顿饭都成为难忘的时光</div>
+      </div>
 
-        <!-- 其余内容保持不变 -->
-        <div class="footer-section">
-          <h4 class="footer-heading">网站导航</h4>
-          <ul class="footer-links">
-            <li><a href="#">首页</a></li>
-            <li><a href="#">菜谱</a></li>
-            <li><a href="#">食材</a></li>
-            <li><a href="#">合集</a></li>
-            <li><a href="#">烹饪技巧</a></li>
+      <div class="footer-links">
+        <div class="link-group">
+          <h4 class="link-title">网站导航</h4>
+          <ul class="link-list">
+            <li><a href="/">首页</a></li>
+            <li><a href="/recipes">菜谱</a></li>
+            <li><a href="/ingredients">食材</a></li>
+            <li><a href="/collections">合集</a></li>
+            <li><a href="/tips">烹饪技巧</a></li>
           </ul>
         </div>
 
-        <div class="footer-section">
-          <h4 class="footer-heading">关于我们</h4>
-          <ul class="footer-links">
-            <li><a href="#">关于味见好时光</a></li>
-            <li><a href="#">加入我们</a></li>
-            <li><a href="#">用户协议</a></li>
-            <li><a href="#">隐私政策</a></li>
-            <li><a href="#">联系我们</a></li>
+        <div class="link-group">
+          <h4 class="link-title">关于我们</h4>
+          <ul class="link-list">
+            <li><a href="/about">关于味见</a></li>
+            <li><a href="/join">加入我们</a></li>
+            <li><a href="/feedback">意见反馈</a></li>
+            <li><a href="/help">帮助中心</a></li>
+            <li><a href="/contact">联系我们</a></li>
           </ul>
         </div>
 
-        <div class="footer-section">
-          <h4 class="footer-heading">订阅美食周刊</h4>
-          <p class="newsletter-text">订阅我们的美食周刊，获取最新的菜谱和烹饪技巧</p>
-          <div class="newsletter-form">
-            <a-input placeholder="输入您的邮箱" />
-            <a-button type="primary">订阅</a-button>
+        <div class="link-group">
+          <h4 class="link-title">社区</h4>
+          <ul class="link-list">
+            <li><a href="/community">美食社区</a></li>
+            <li><a href="/creators">创作者中心</a></li>
+            <li><a href="/events">线下活动</a></li>
+            <li><a href="/challenges">挑战赛</a></li>
+            <li><a href="/discussion">讨论区</a></li>
+          </ul>
+        </div>
+
+        <div class="link-group app-download">
+          <h4 class="link-title">下载 APP</h4>
+          <div class="qrcode">
+            <div class="qrcode-placeholder"></div>
+            <p class="qrcode-tip">扫描下载味见 APP</p>
+          </div>
+          <div class="download-btns">
+            <a href="#" class="app-btn">
+              <apple-outlined />
+              App Store
+            </a>
+            <a href="#" class="app-btn">
+              <android-outlined />
+              安卓下载
+            </a>
           </div>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <p>© 2025 味见好时光 - 美食与记忆的完美交融</p>
+        <div class="copyright">
+          &copy; {{ currentYear }} 味见好时光 · 保留所有权利
+        </div>
+        <div class="policy-links">
+          <a href="/terms">用户协议</a>
+          <a href="/privacy">隐私政策</a>
+          <a href="/cookies">Cookie 政策</a>
+          <a href="/security">网站安全</a>
+        </div>
       </div>
     </div>
   </a-layout-footer>
 </template>
 
 <script setup lang="ts">
-import {
-  WeiboOutlined,
-  WechatOutlined,
-  InstagramOutlined,
-  ZhihuOutlined
-} from '@ant-design/icons-vue'
+import { ref, computed } from 'vue'
+import { AppleOutlined, AndroidOutlined } from '@ant-design/icons-vue'
+
+// 当前年份
+const currentYear = computed(() => new Date().getFullYear())
 </script>
 
 <style scoped>
 .app-footer {
-  background-color: #333333;
-  color: #ffffff;
+  background-color: #2c3e50;
   padding: 48px 0 24px;
-}
-
-.container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 24px;
-  width: 100%;
+  color: #f9f9f9;
 }
 
 .footer-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 32px;
-  margin-bottom: 40px;
-}
-
-.footer-section {
   display: flex;
   flex-direction: column;
+  gap: 40px;
 }
 
-.logo-area {
+/* 顶部区域 */
+.footer-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.footer-logo {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
-.footer-logo-icon {
-  font-size: 24px;
-  color: var(--primary-color);
-}
-
-.footer-logo-text {
-  font-size: 20px;
-  font-weight: bold;
-  margin: 0;
-  color: white;
-}
-
-.slogan {
-  color: #bdbdbd;
-  margin-bottom: 16px;
-  line-height: 1.5;
-}
-
-.social-links {
+.logo-icon {
   display: flex;
-  gap: 16px;
+  align-items: center;
 }
 
-.social-icon {
-  color: #bdbdbd;
-  font-size: 20px;
-  transition: color 0.3s;
+.logo-text {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--primary-color, #F0884C);
+  margin: 0;
 }
 
-.social-icon:hover {
-  color: var(--primary-color);
+.footer-slogan {
+  font-size: 14px;
+  color: #a0aec0;
+  max-width: 500px;
 }
 
-.footer-heading {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: white;
-}
-
+/* 链接区域 */
 .footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.link-group {
+  min-width: 160px;
+}
+
+.link-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.link-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(to right, var(--primary-gradient-start, #FF9966), var(--primary-gradient-end, #FF5E62));
+}
+
+.link-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.footer-links li {
-  margin-bottom: 12px;
+.link-list li {
+  margin-bottom: 10px;
 }
 
-.footer-links a {
-  color: #bdbdbd;
+.link-list a {
+  color: #a0aec0;
   text-decoration: none;
-  transition: color 0.3s;
+  transition: color 0.2s;
+  font-size: 14px;
 }
 
-.footer-links a:hover {
-  color: white;
+.link-list a:hover {
+  color: var(--primary-color, #F0884C);
 }
 
-.newsletter-text {
-  color: #bdbdbd;
-  margin-bottom: 16px;
-  line-height: 1.5;
+/* 二维码区域 */
+.app-download {
+  flex-grow: 1;
+  max-width: 220px;
 }
 
-.newsletter-form {
-  display: flex;
-}
-
-.newsletter-form :deep(.ant-input) {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.newsletter-form :deep(.ant-btn) {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.footer-bottom {
-  border-top: 1px solid #444444;
-  padding-top: 24px;
+.qrcode {
   text-align: center;
-  color: #bdbdbd;
+  margin-bottom: 16px;
+}
+
+.qrcode-placeholder {
+  width: 120px;
+  height: 120px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin: 0 auto 8px;
+  position: relative;
+}
+
+.qrcode-placeholder::before {
+  content: 'QR Code';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+}
+
+.qrcode-tip {
+  font-size: 12px;
+  color: #a0aec0;
+  margin: 0;
+}
+
+.download-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.app-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 12px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.app-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 底部区域 */
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.copyright {
+  color: #718096;
+  font-size: 14px;
+}
+
+.policy-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.policy-links a {
+  color: #a0aec0;
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.policy-links a:hover {
+  color: var(--primary-color, #F0884C);
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+  .footer-links {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .link-group {
+    min-width: 100%;
+  }
+
+  .app-download {
+    max-width: 100%;
+  }
+
+  .qrcode {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .qrcode-placeholder {
+    margin: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .app-footer {
+    padding: 32px 0 16px;
+  }
+
+  .footer-links {
+    gap: 16px;
+  }
+
+  .footer-bottom {
+    gap: 8px;
+  }
+
+  .qrcode {
+    flex-direction: column;
+  }
 }
 </style>

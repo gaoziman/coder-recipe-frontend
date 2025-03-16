@@ -1,21 +1,8 @@
-:root {
-  /* 网站主色调，根据原型图 */
-  --primary-color: #FF9966;
-  --primary-hover: #FF8C66;
-  --primary-gradient-start: #FF9966;
-  --primary-gradient-end: #FF5E62;
-  --background-color: #FFF8F0;
-  --card-background: #FFFFFF;
-  --tag-background: #FFEBE0;
-  --text-primary: #333333;
-  --text-secondary: #666666;
-  --text-light: #999999;
-  --container-width: 1140px;
-}
+@import '@/assets/styles/variables.css';
 
 body {
   background-color: var(--background-color);
-  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-family: var(--font-family);
   color: var(--text-primary);
   margin: 0;
   padding: 0;

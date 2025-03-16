@@ -36,13 +36,17 @@ import { BookOutlined, PlusCircleOutlined } from '@ant-design/icons-vue'
 }
 
 .banner-content {
-  width: 55%;
+  width: 50%;
   height: 100%;
   background: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding-right: 3%;
+  /* 修改：保持居中对齐，但增加左侧内边距 */
+  justify-content: center;
+  /* 修改：增加左侧内边距，减少右侧负边距 */
+  padding-left: 15%;
+  padding-right: 5%;
+  margin-right: -3%;
   position: relative;
   z-index: 2;
 }
@@ -50,9 +54,9 @@ import { BookOutlined, PlusCircleOutlined } from '@ant-design/icons-vue'
 .banner-text {
   max-width: 520px;
   color: white;
-  padding-right: 40px;
+  text-align: left;
+  margin-left: 30%;
 }
-
 .banner-title {
   font-size: 40px;
   font-weight: bold;
@@ -69,6 +73,8 @@ import { BookOutlined, PlusCircleOutlined } from '@ant-design/icons-vue'
 .banner-buttons {
   display: flex;
   gap: 16px;
+  /* 保持按钮左对齐 */
+  justify-content: flex-start;
 }
 
 .banner-btn {
@@ -125,7 +131,11 @@ import { BookOutlined, PlusCircleOutlined } from '@ant-design/icons-vue'
 @media (max-width: 1024px) {
   .banner-content {
     width: 60%;
-    padding-left: 24px;
+    margin-right: -3%;
+  }
+
+  .banner-text {
+    margin-left: 3%;
   }
 
   .banner-image {
@@ -136,16 +146,19 @@ import { BookOutlined, PlusCircleOutlined } from '@ant-design/icons-vue'
 @media (max-width: 768px) {
   .banner-content {
     width: 100%;
-    padding-left: 24px;
+    margin-right: 0;
+    padding: 0 24px;
+    /* 在移动设备上保持居中 */
     justify-content: center;
-    text-align: center;
   }
 
   .banner-text {
-    padding-right: 0;
+    margin-left: 0;
+    text-align: center;
   }
 
   .banner-buttons {
+    /* 在移动设备上居中显示按钮 */
     justify-content: center;
   }
 
