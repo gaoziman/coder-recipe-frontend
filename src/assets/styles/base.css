@@ -1,0 +1,177 @@
+:root {
+  /* 网站主色调，根据原型图 */
+  --primary-color: #FF9966;
+  --primary-hover: #FF8C66;
+  --primary-gradient-start: #FF9966;
+  --primary-gradient-end: #FF5E62;
+  --background-color: #FFF8F0;
+  --card-background: #FFFFFF;
+  --tag-background: #FFEBE0;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-light: #999999;
+  --container-width: 1140px;
+}
+
+body {
+  background-color: var(--background-color);
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+}
+
+/* 全局样式 */
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+}
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.content-block {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 32px;
+  margin-bottom: 32px;
+}
+
+/* Ant Design 样式覆盖 */
+
+/* 按钮相关 */
+.ant-btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.ant-btn-primary:hover {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+}
+
+.ant-btn-default {
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+}
+
+.ant-btn-default:hover {
+  color: white !important;
+  background-color: var(--primary-color) !important;
+}
+
+/* 输入框相关 */
+.ant-input:focus,
+.ant-input-focused {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(255, 153, 102, 0.2) !important;
+}
+
+/* 卡片相关 */
+.ant-card-hoverable:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+  transform: translateY(-4px);
+}
+
+/* 标签相关 */
+.ant-tag-orange {
+  color: var(--primary-color) !important;
+  background: var(--tag-background) !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* 菜单相关 */
+.ant-menu-item-selected,
+.ant-menu-item:hover {
+  color: var(--primary-color) !important;
+}
+
+.ant-menu-item-selected:after {
+  background-color: var(--primary-color) !important;
+}
+
+/* 链接颜色 */
+a {
+  color: var(--primary-color);
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+/* 模态框相关 */
+.ant-modal-title {
+  font-weight: bold;
+}
+
+.ant-modal-footer .ant-btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* 选择器相关 */
+.ant-select-focused .ant-select-selector,
+.ant-select-selector:focus,
+.ant-select-selector:active,
+.ant-select-open .ant-select-selector {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(255, 153, 102, 0.2) !important;
+}
+
+/* 复选框相关 */
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* 单选框相关 */
+.ant-radio-checked .ant-radio-inner {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-radio-inner::after {
+  background-color: var(--primary-color) !important;
+}
+
+/* 开关相关 */
+.ant-switch-checked {
+  background-color: var(--primary-color) !important;
+}
+
+/* 分页相关 */
+.ant-pagination-item-active {
+  border-color: var(--primary-color) !important;
+}
+
+.ant-pagination-item-active a {
+  color: var(--primary-color) !important;
+}
+
+/* 表格相关 */
+.ant-table-thead > tr > th {
+  background: var(--tag-background) !important;
+  color: var(--text-primary) !important;
+}
+
+/* 选项卡相关 */
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--primary-color) !important;
+}
+
+.ant-tabs-ink-bar {
+  background-color: var(--primary-color) !important;
+}
