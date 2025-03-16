@@ -6,7 +6,11 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
         name: 'Home',
-        component: () => import('@/pages/home/Home.vue')
+        component: () => import('@/pages/home/Home.vue'),
+        meta: {
+            title: '首页',
+            requiresAuth: false
+        }
     },
     // {
     //     path: '/recipes',
@@ -43,13 +47,19 @@ const routes: Array<RouteRecordRaw> = [
         path: '/user',
         name: 'UserLayout',
         component: () => import('@/pages/user/UserLayout.vue'),
-        meta: { requiresAuth: true },
+        meta: {
+            title: '用户中心',
+            requiresAuth: true
+        },
         children: [
             {
                 path: 'profile',
                 name: 'UserProfile',
                 component: () => import('@/pages/user/UserProfile.vue'),
-                meta: { requiresAuth: true }
+                meta: {
+                    title: '个人资料',
+                    requiresAuth: true
+                }
             },
             // {
             //     path: 'favorites',
@@ -104,6 +114,10 @@ const router = createRouter({
 
 // 全局前置守卫
 router.beforeEach((to, from, next) => {
+    // 设置文档标题的逻辑
+    if (to.meta.title) {
+        document.title = `${to.meta.title} - 味见好时光`
+    }
     // 检查路由是否需要登录权限
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 

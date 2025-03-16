@@ -1,198 +1,273 @@
-<!-- src/pages/user/UserProfile.vue -->
+<!-- UserProfile.vue -->
 <template>
   <div class="user-profile">
-    <div class="page-header">
-      <h2 class="page-title">个人中心</h2>
-      <p class="page-description">管理您的个人信息和烹饪偏好</p>
+    <!-- 基本信息区块 -->
+    <div class="info-section">
+      <div class="section-title">
+        <profile-outlined class="section-icon" />
+        <span>基本信息</span>
+      </div>
+
+      <a-form :model="profileForm" layout="vertical" class="profile-form">
+        <div class="form-group">
+          <div class="form-item">
+            <div class="form-label">用户名</div>
+            <a-input v-model:value="profileForm.username" placeholder="请输入用户名" />
+          </div>
+
+          <div class="form-item">
+            <div class="form-label">昵称</div>
+            <a-input v-model:value="profileForm.nickname" placeholder="请输入昵称" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-item">
+            <div class="form-label">性别</div>
+            <a-radio-group v-model:value="profileForm.gender">
+              <a-radio value="female">女</a-radio>
+              <a-radio value="male">男</a-radio>
+              <a-radio value="private">不公开</a-radio>
+            </a-radio-group>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-item">
+            <div class="form-label">生日</div>
+            <a-date-picker
+                v-model:value="profileForm.birthday"
+                style="width: 100%"
+                :format="dateFormat"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-item wide">
+            <div class="form-label">地区</div>
+            <div class="region-selects">
+              <a-select
+                  v-model:value="profileForm.province"
+                  placeholder="请选择省/市"
+              >
+                <a-select-option value="beijing">北京市</a-select-option>
+                <a-select-option value="shanghai">上海市</a-select-option>
+                <a-select-option value="guangzhou">广州市</a-select-option>
+                <a-select-option value="shenzhen">深圳市</a-select-option>
+              </a-select>
+              <a-select
+                  v-model:value="profileForm.city"
+                  placeholder="请选择区/县"
+              >
+                <a-select-option value="chaoyang">朝阳区</a-select-option>
+                <a-select-option value="haidian">海淀区</a-select-option>
+                <a-select-option value="dongcheng">东城区</a-select-option>
+                <a-select-option value="xicheng">西城区</a-select-option>
+              </a-select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-item wide">
+            <div class="form-label">个人简介</div>
+            <a-textarea
+                v-model:value="profileForm.bio"
+                :rows="4"
+                placeholder="分享一些关于您的信息..."
+                :maxlength="100"
+            />
+            <div class="char-count">个人简介不超过100字</div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a-button type="primary" class="primary-btn">保存修改</a-button>
+        </div>
+      </a-form>
     </div>
 
-    <a-row :gutter="[24, 24]">
-      <!-- 用户信息卡片 -->
-      <a-col :span="24">
-        <a-card class="info-card" :bordered="false">
-          <template #title>
-            <div class="card-title">
-              <user-outlined class="card-icon" />
-              <span>基本信息</span>
-            </div>
-          </template>
+    <!-- 联系方式区块 -->
+    <div class="info-section">
+      <div class="section-title">
+        <contacts-outlined class="section-icon" />
+        <span>联系方式</span>
+      </div>
 
-          <a-descriptions :column="{ xs: 1, sm: 2, md: 3 }" layout="vertical">
-            <a-descriptions-item label="用户名">
-              <div class="value-display">{{ userInfo?.username }}</div>
-            </a-descriptions-item>
-            <a-descriptions-item label="邮箱">
-              <div class="value-display">{{ userInfo?.email }}</div>
-            </a-descriptions-item>
-            <a-descriptions-item label="会员等级">
-              <a-tag color="orange">普通会员</a-tag>
-            </a-descriptions-item>
-            <a-descriptions-item label="注册时间">
-              <div class="value-display">2025-03-01</div>
-            </a-descriptions-item>
-            <a-descriptions-item label="最近登录">
-              <div class="value-display">{{ formatDate(new Date()) }}</div>
-            </a-descriptions-item>
-          </a-descriptions>
-
-          <a-divider />
-
-          <div class="action-section">
-            <a-button type="primary" class="edit-btn">
-              <template #icon><edit-outlined /></template>
-              编辑资料
-            </a-button>
+      <div class="form-group">
+        <div class="form-item wide">
+          <div class="form-label">手机号码</div>
+          <div class="input-with-action">
+            <a-input value="138****5678" disabled />
+            <a-button class="action-btn">修改</a-button>
           </div>
-        </a-card>
-      </a-col>
+        </div>
+      </div>
 
-      <!-- 统计卡片 -->
-      <a-col :xs="24" :sm="12" :md="8">
-        <a-card class="stat-card recipes-card" :bordered="false">
-          <div class="stat-value">6</div>
-          <div class="stat-label">我的菜谱</div>
-          <fire-outlined class="stat-icon" />
-        </a-card>
-      </a-col>
-
-      <a-col :xs="24" :sm="12" :md="8">
-        <a-card class="stat-card favs-card" :bordered="false">
-          <div class="stat-value">32</div>
-          <div class="stat-label">收藏菜谱</div>
-          <heart-outlined class="stat-icon" />
-        </a-card>
-      </a-col>
-
-      <a-col :xs="24" :sm="12" :md="8">
-        <a-card class="stat-card likes-card" :bordered="false">
-          <div class="stat-value">128</div>
-          <div class="stat-label">获赞总数</div>
-          <like-outlined class="stat-icon" />
-        </a-card>
-      </a-col>
-
-      <!-- 近期活动 -->
-      <a-col :span="24">
-        <a-card class="activity-card" :bordered="false">
-          <template #title>
-            <div class="card-title">
-              <history-outlined class="card-icon" />
-              <span>近期活动</span>
-            </div>
-          </template>
-
-          <a-timeline mode="left">
-            <a-timeline-item color="green">
-              <template #dot>
-                <like-outlined style="font-size: 16px;" />
-              </template>
-              <span class="timeline-content">
-                您给 <a>红烧排骨</a> 点了赞
-              </span>
-              <span class="timeline-time">2小时前</span>
-            </a-timeline-item>
-
-            <a-timeline-item color="blue">
-              <template #dot>
-                <message-outlined style="font-size: 16px;" />
-              </template>
-              <span class="timeline-content">
-                您评论了 <a>糖醋里脊</a>
-              </span>
-              <span class="timeline-time">1天前</span>
-            </a-timeline-item>
-
-            <a-timeline-item color="orange">
-              <template #dot>
-                <star-outlined style="font-size: 16px;" />
-              </template>
-              <span class="timeline-content">
-                您收藏了 <a>香煎三文鱼</a>
-              </span>
-              <span class="timeline-time">3天前</span>
-            </a-timeline-item>
-
-            <a-timeline-item color="#F0884C">
-              <template #dot>
-                <fire-outlined style="font-size: 16px;" />
-              </template>
-              <span class="timeline-content">
-                您发布了新菜谱 <a>宫保鸡丁</a>
-              </span>
-              <span class="timeline-time">1周前</span>
-            </a-timeline-item>
-          </a-timeline>
-        </a-card>
-      </a-col>
-
-      <!-- 烹饪偏好 -->
-      <a-col :span="24">
-        <a-card class="preference-card" :bordered="false">
-          <template #title>
-            <div class="card-title">
-              <heart-outlined class="card-icon" />
-              <span>烹饪偏好</span>
-            </div>
-          </template>
-
-          <div class="pref-section">
-            <h4 class="pref-title">喜爱的菜系</h4>
-            <div class="tag-group">
-              <a-tag color="orange">川菜</a-tag>
-              <a-tag color="blue">粤菜</a-tag>
-              <a-tag color="green">东北菜</a-tag>
-              <a-tag color="purple">日料</a-tag>
-              <a-tag color="magenta">意大利菜</a-tag>
-              <a-tag>+ 添加</a-tag>
-            </div>
+      <div class="form-group">
+        <div class="form-item wide">
+          <div class="form-label">邮箱</div>
+          <div class="input-with-action">
+            <a-input value="example@mail.com" />
+            <a-button class="action-btn">验证</a-button>
           </div>
-
-          <div class="pref-section">
-            <h4 class="pref-title">擅长的烹饪技巧</h4>
-            <div class="tag-group">
-              <a-tag color="orange">爆炒</a-tag>
-              <a-tag color="blue">煎</a-tag>
-              <a-tag color="green">蒸</a-tag>
-              <a-tag>+ 添加</a-tag>
-            </div>
+          <div class="alert-text">
+            <warning-outlined />
+            <span>邮箱未验证</span>
           </div>
+        </div>
+      </div>
 
-          <div class="pref-section">
-            <h4 class="pref-title">饮食习惯</h4>
-            <div class="tag-group">
-              <a-tag color="orange">低脂</a-tag>
-              <a-tag color="blue">高蛋白</a-tag>
-              <a-tag>+ 添加</a-tag>
-            </div>
+      <div class="form-group">
+        <div class="form-item wide">
+          <div class="form-label">微信</div>
+          <div class="input-with-action">
+            <a-input value="未绑定" disabled />
+            <a-button class="action-btn">绑定</a-button>
           </div>
-        </a-card>
-      </a-col>
-    </a-row>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a-button type="primary" class="primary-btn">保存修改</a-button>
+      </div>
+    </div>
+
+    <!-- 偏好设置区块 -->
+    <div class="info-section">
+      <div class="section-title">
+        <setting-outlined class="section-icon" />
+        <span>偏好设置</span>
+      </div>
+
+      <div class="preference-section">
+        <h3 class="preference-title">喜爱的菜系</h3>
+        <div class="tag-group">
+          <label class="preference-tag active">
+            <input type="checkbox" checked class="tag-checkbox" />
+            <span>川菜</span>
+          </label>
+          <label class="preference-tag active">
+            <input type="checkbox" checked class="tag-checkbox" />
+            <span>粤菜</span>
+          </label>
+          <label class="preference-tag active">
+            <input type="checkbox" checked class="tag-checkbox" />
+            <span>东北菜</span>
+          </label>
+          <label class="preference-tag">
+            <input type="checkbox" class="tag-checkbox" />
+            <span>日料</span>
+          </label>
+          <label class="preference-tag active">
+            <input type="checkbox" checked class="tag-checkbox" />
+            <span>意大利菜</span>
+          </label>
+          <label class="preference-tag">
+            <input type="checkbox" class="tag-checkbox" />
+            <span>+ 添加</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="preference-section">
+        <h3 class="preference-title">饮食禁忌</h3>
+        <div class="tag-group">
+          <label class="preference-tag">
+            <input type="checkbox" class="tag-checkbox" />
+            <span>海鲜</span>
+          </label>
+          <label class="preference-tag">
+            <input type="checkbox" class="tag-checkbox" />
+            <span>牛肉</span>
+          </label>
+          <label class="preference-tag active">
+            <input type="checkbox" checked class="tag-checkbox" />
+            <span>花生</span>
+          </label>
+          <label class="preference-tag">
+            <input type="checkbox" class="tag-checkbox" />
+            <span>乳制品</span>
+          </label>
+          <label class="preference-tag">
+            <input type="checkbox" class="tag-checkbox" />
+            <span>麸质</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="preference-section">
+        <h3 class="preference-title">通知设置</h3>
+        <div class="notification-settings">
+          <div class="notification-item">
+            <span class="notification-label">菜谱点赞通知</span>
+            <a-switch v-model:checked="notifications.likes" />
+          </div>
+          <div class="notification-item">
+            <span class="notification-label">菜谱评论通知</span>
+            <a-switch v-model:checked="notifications.comments" defaultChecked />
+          </div>
+          <div class="notification-item">
+            <span class="notification-label">新粉丝通知</span>
+            <a-switch v-model:checked="notifications.followers" defaultChecked />
+          </div>
+          <div class="notification-item">
+            <span class="notification-label">私信通知</span>
+            <a-switch v-model:checked="notifications.messages" defaultChecked />
+          </div>
+          <div class="notification-item">
+            <span class="notification-label">每周美食推荐</span>
+            <a-switch v-model:checked="notifications.weeklyRecommendations" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a-button type="primary" class="primary-btn">保存修改</a-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useUserStore } from '@/stores/user'
+import { ref, reactive } from 'vue';
+import dayjs from 'dayjs';
 import {
-  UserOutlined,
-  EditOutlined,
-  FireOutlined,
-  HeartOutlined,
-  LikeOutlined,
-  HistoryOutlined,
-  MessageOutlined,
-  StarOutlined
-} from '@ant-design/icons-vue'
+  ProfileOutlined,
+  ContactsOutlined,
+  SettingOutlined,
+  LinkOutlined,
+  WechatOutlined,
+  WeiboOutlined,
+  ReadOutlined,
+  InstagramOutlined,
+  InfoCircleOutlined,
+  WarningOutlined
+} from '@ant-design/icons-vue';
 
-// 获取用户信息
-const userStore = useUserStore()
-const userInfo = computed(() => userStore.userInfo)
+// 日期格式
+const dateFormat = 'YYYY-MM-DD';
 
-// 格式化日期
-const formatDate = (date: Date): string => {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
-}
+// 表单数据
+const profileForm = reactive({
+  username: '阳光厨房',
+  nickname: '小厨娘',
+  gender: 'female',
+  birthday: dayjs('1995-05-20'),
+  province: 'beijing',
+  city: 'chaoyang',
+  bio: '分享美食，传递快乐。热爱烹饪的90后，擅长家常菜和甜点制作，希望通过美食记录生活的点滴。'
+});
+
+// 通知设置
+const notifications = reactive({
+  likes: false,
+  comments: true,
+  followers: true,
+  messages: true,
+  weeklyRecommendations: false
+});
 </script>
 
 <style scoped>
@@ -200,210 +275,334 @@ const formatDate = (date: Date): string => {
   width: 100%;
 }
 
-.page-header {
-  margin-bottom: 24px;
-}
-
-.page-title {
-  margin: 0 0 4px 0;
-  font-size: 24px;
+.section-header h2 {
+  font-size: 20px;
   font-weight: 600;
   color: #333;
-}
-
-.page-description {
-  margin: 0;
-  font-size: 14px;
-  color: #999;
-}
-
-/* 卡片通用样式 */
-.info-card,
-.stat-card,
-.activity-card,
-.preference-card {
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s;
-}
-
-.info-card:hover,
-.activity-card:hover,
-.preference-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* 卡片标题样式 */
-.card-title {
+  margin: 0 0 8px 0;
   display: flex;
   align-items: center;
-  font-size: 16px;
+}
+
+/* 内容区块通用样式 */
+.info-section {
+  background-color: #fff;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.section-title {
+  font-size: var(--font-size-lg);
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  align-items: center;
 }
 
-.card-icon {
-  margin-right: 8px;
-  color: var(--primary-color, #F0884C);
+.section-icon {
+  color: var(--primary-color);
+  margin-right: var(--spacing-sm);
+  font-size: var(--font-size-lg);
 }
 
-/* 基本信息卡片样式 */
-.value-display {
-  font-size: 14px;
-  color: #333;
+/* 表单样式 */
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-lg);
 }
 
-.action-section {
+.form-item {
+  flex: 1;
+  min-width: 240px;
+  margin-right: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.form-item.wide {
+  width: 100%;
+  flex-basis: 100%;
+}
+
+.form-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.region-selects {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.region-selects .ant-select {
+  width: 100%;
+}
+
+/* 自定义 Ant Design 组件样式 */
+:deep(.ant-input:focus),
+:deep(.ant-input-focused) {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(255, 153, 102, 0.2) !important;
+}
+
+:deep(.ant-input:hover) {
+  border-color: var(--primary-color) !important;
+}
+
+:deep(.ant-select:hover .ant-select-selector) {
+  border-color: var(--primary-color) !important;
+}
+
+:deep(.ant-select-focused .ant-select-selector),
+:deep(.ant-select-selector:focus),
+:deep(.ant-select-selector:active),
+:deep(.ant-select-open .ant-select-selector) {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(255, 153, 102, 0.2) !important;
+}
+
+:deep(.ant-radio-checked .ant-radio-inner) {
+  border-color: var(--primary-color) !important;
+}
+
+:deep(.ant-radio-inner::after) {
+  background-color: var(--primary-color) !important;
+}
+
+:deep(.ant-radio-wrapper:hover .ant-radio-inner) {
+  border-color: var(--primary-color) !important;
+}
+
+:deep(.ant-picker:hover),
+:deep(.ant-picker-focused) {
+  border-color: var(--primary-color) !important;
+}
+
+:deep(.ant-picker-focused) {
+  box-shadow: 0 0 0 2px rgba(255, 153, 102, 0.2) !important;
+}
+
+:deep(.ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner) {
+  background-color: var(--primary-color) !important;
+}
+
+:deep(.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before) {
+  border-color: var(--primary-color) !important;
+}
+
+.char-count {
+  text-align: right;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  margin-top: var(--spacing-xs);
+}
+
+/* 按钮样式 */
+.form-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 16px;
+  margin-top: var(--spacing-lg);
 }
 
-.edit-btn {
-  background: linear-gradient(to right, var(--primary-gradient-start, #FF9966), var(--primary-gradient-end, #FF5E62));
-  border: none;
+.primary-btn {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  border-radius: var(--border-radius-sm);
   font-weight: 500;
-  height: 36px;
-  border-radius: 18px;
-  transition: all 0.3s;
 }
 
-.edit-btn:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 94, 98, 0.2);
+.primary-btn:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
-/* 统计卡片样式 */
-.stat-card {
-  height: 120px;
-  padding: 20px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+.input-with-action {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.action-btn {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: transparent;
+}
+
+.action-btn:hover {
+  background: var(--tag-background);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.action-btn.gray {
+  border-color: #d9d9d9;
+  color: var(--text-secondary);
+}
+
+.action-btn.gray:hover {
+  background: #f5f5f5;
+  border-color: #d9d9d9;
+}
+
+.alert-text {
+  color: var(--warning-color);
+  font-size: var(--font-size-xs);
+  margin-top: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+}
+
+.alert-text span {
+  margin-left: var(--spacing-xs);
+}
+
+/* 账号绑定样式 */
+.connection-items {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
-.stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.stat-value {
-  font-size: 36px;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 2;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: #666;
-  position: relative;
-  z-index: 2;
-}
-
-.stat-icon {
-  position: absolute;
-  bottom: -15px;
-  right: -15px;
-  font-size: 80px;
-  opacity: 0.1;
-  color: #000;
-  transition: all 0.3s;
-}
-
-.stat-card:hover .stat-icon {
-  transform: scale(1.1) rotate(10deg);
-}
-
-.recipes-card {
-  background: linear-gradient(135deg, #ffefba, #ffffff);
-}
-
-.recipes-card .stat-value {
-  color: #f5a623;
-}
-
-.favs-card {
-  background: linear-gradient(135deg, #ffe8e8, #ffffff);
-}
-
-.favs-card .stat-value {
-  color: #ff5e62;
-}
-
-.likes-card {
-  background: linear-gradient(135deg, #e8f5ff, #ffffff);
-}
-
-.likes-card .stat-value {
-  color: #1890ff;
-}
-
-/* 活动时间线样式 */
-:deep(.ant-timeline-item-content) {
+.connection-item {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
 }
 
-.timeline-content {
-  flex: 1;
+.connection-left {
+  display: flex;
+  align-items: center;
 }
 
-.timeline-content a {
-  color: var(--primary-color, #F0884C);
+.app-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--spacing-md);
+  font-size: 20px;
+}
+
+.app-icon.wechat {
+  background-color: #ecf9ec;
+  color: #07c160;
+}
+
+.app-icon.weibo {
+  background-color: #ffeeee;
+  color: #e6162d;
+}
+
+.app-icon.douban {
+  background-color: #fff7e6;
+  color: #e09015;
+}
+
+.app-icon.instagram {
+  background-color: #f5efff;
+  color: #c13584;
+}
+
+.app-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-name {
   font-weight: 500;
-  text-decoration: none;
+  color: var(--text-primary);
 }
 
-.timeline-content a:hover {
-  text-decoration: underline;
+.app-status {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
 }
 
-.timeline-time {
-  font-size: 12px;
-  color: #999;
-  white-space: nowrap;
-  margin-left: 16px;
+.message-box {
+  background-color: #f9f9f9;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: flex-start;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.info-icon {
+  color: var(--info-color);
+  margin-right: var(--spacing-sm);
+  margin-top: 2px;
+  flex-shrink: 0;
 }
 
 /* 偏好设置样式 */
-.pref-section {
-  margin-bottom: 20px;
+.preference-section {
+  margin-bottom: var(--spacing-lg);
 }
 
-.pref-title {
-  font-size: 14px;
+.preference-title {
+  font-size: var(--font-size-sm);
   font-weight: 600;
-  margin: 0 0 12px 0;
-  color: #666;
+  color: var(--text-secondary);
+  margin: 0 0 var(--spacing-md) 0;
 }
 
 .tag-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
-:deep(.ant-tag) {
-  padding: 4px 10px;
-  font-size: 13px;
-  border-radius: 12px;
+.preference-tag {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-pill);
+  padding: 5px 12px;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  background-color: #fff;
   cursor: pointer;
-  transition: all 0.2s;
-  margin-right: 0;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
 }
 
-:deep(.ant-tag:hover) {
-  transform: scale(1.05);
+.preference-tag.active {
+  background-color: var(--tag-background);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.tag-checkbox {
+  display: none;
+}
+
+/* 通知设置样式 */
+.notification-settings {
+  margin-bottom: var(--spacing-md);
+}
+
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-label {
+  color: var(--text-primary);
 }
 </style>
