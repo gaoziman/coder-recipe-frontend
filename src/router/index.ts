@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import { useUserStore } from '@/stores/user'
-import { message } from 'ant-design-vue'
+import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
+import {useUserStore} from '@/stores/user'
+import {message} from 'ant-design-vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -12,13 +12,48 @@ const routes: Array<RouteRecordRaw> = [
             requiresAuth: false
         }
     },
-
     {
         path: '/ai',
         name: 'KitchenAssistant',
         component: () => import('@/pages/kitchenai/KitchenAssistant.vue'),
         meta: {
             title: 'AI食材搭配',
+            requiresAuth: false
+        }
+    },
+    {
+        path: '/ingredients',
+        name: 'IngredientList',
+        component: () => import('@/pages/ingredient/IngredientList.vue'),
+        meta: {
+            title: '食材库',
+            requiresAuth: false
+        }
+    },
+    {
+        path: '/ingredient/category/:categoryId',
+        name: 'IngredientCategory',
+        component: () => import('@/pages/ingredient/IngredientCategory.vue'),
+        meta: {
+            title: '食材分类',
+            requiresAuth: false
+        }
+    },
+    {
+        path: '/ingredient/:id',
+        name: 'IngredientDetail',
+        component: () => import('@/pages/ingredient/IngredientDetail.vue'),
+        meta: {
+            title: '食材详情',
+            requiresAuth: false
+        }
+    },
+    {
+        path: '/ingredient/seasonal',
+        name: 'SeasonalIngredients',
+        component: () => import('@/pages/ingredient/SeasonalIngredients.vue'),
+        meta: {
+            title: '当季食材',
             requiresAuth: false
         }
     },
@@ -176,7 +211,7 @@ const router = createRouter({
     routes,
     scrollBehavior() {
         // 始终滚动到顶部
-        return { top: 0 }
+        return {top: 0}
     }
 })
 
@@ -201,7 +236,7 @@ router.beforeEach((to, from, next) => {
             localStorage.setItem('redirectPath', to.fullPath)
 
             // 重定向到首页
-            next({ path: '/' })
+            next({path: '/'})
 
             // 通过事件总线触发显示登录弹窗
             // 这里需要一个全局事件总线来触发登录弹窗显示

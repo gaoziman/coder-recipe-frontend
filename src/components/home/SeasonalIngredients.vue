@@ -2,14 +2,19 @@
   <section class="seasonal-ingredients container">
     <div class="section-header">
       <h2 class="section-title">当季食材</h2>
-      <a-button type="link" class="view-all-link">
+      <a-button type="link" class="view-all-link" @click="navigateToAllIngredients">
         查看全部 <right-outlined />
       </a-button>
     </div>
 
     <div class="ingredients-grid">
-      <a-card v-for="(ingredient, index) in ingredients" :key="index"
-              hoverable class="ingredient-card">
+      <a-card
+          v-for="(ingredient, index) in ingredients"
+          :key="index"
+          hoverable
+          class="ingredient-card"
+          @click="navigateToIngredientDetail(ingredient.id)"
+      >
         <template #cover>
           <div class="ingredient-image">
             <img :src="ingredient.image" :alt="ingredient.name" />
@@ -20,7 +25,11 @@
             <p class="ingredient-desc">{{ ingredient.description }}</p>
             <div class="ingredient-footer">
               <a-tag class="season-tag">{{ ingredient.season }}</a-tag>
-              <a-button type="link" class="bookmark-btn">
+              <a-button
+                  type="link"
+                  class="bookmark-btn"
+                  @click.stop="bookmarkIngredient(ingredient.id)"
+              >
                 <template #icon><book-outlined /></template>
               </a-button>
             </div>
@@ -33,41 +42,70 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { RightOutlined, BookOutlined } from '@ant-design/icons-vue'
+import { message } from 'ant-design-vue'
 
-// 当季食材数据 - 更新了图片链接
+// 使用路由进行导航
+const router = useRouter()
+
+// 当季食材数据 - 添加了id字段用于导航
 const ingredients = ref([
   {
+    id: '1',
     name: '南瓜',
     description: '营养丰富，适合煲汤和烘焙',
     image: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655',
     season: '秋季'
   },
   {
+    id: '2',
     name: '栗子',
     description: '香甜可口，可煮可烤',
     image: 'https://images.unsplash.com/photo-1550461716-dbf266b2a8a7',
     season: '秋季'
   },
   {
+    id: '3',
     name: '甜椒',
     description: '营养丰富，颜色鲜艳',
     image: 'https://images.unsplash.com/photo-1550461716-dbf266b2a8a7',
     season: '秋季'
   },
   {
+    id: '4',
     name: '葡萄',
     description: '鲜甜多汁，营养丰富',
     image: 'https://images.unsplash.com/photo-1537640538966-79f369143f8f',
     season: '秋季'
   }
 ])
+
+// 导航到食材详情页
+const navigateToIngredientDetail = (id: string) => {
+  router.push(`/ingredient/${id}`)
+}
+
+// 导航到所有食材页面
+const navigateToAllIngredients = () => {
+  router.push('/ingredient/seasonal')
+}
+
+// 收藏食材功能
+const bookmarkIngredient = (id: string) => {
+  // 阻止事件冒泡，避免触发卡片的点击事件
+  // 已通过@click.stop实现
+
+  // 添加收藏逻辑
+  message.success(`已收藏食材`)
+  // 这里可以添加实际的收藏功能，例如调用API或更新本地状态
+}
 </script>
 
 <style scoped>
+/* 样式保持不变 */
 .seasonal-ingredients {
   padding: 24px 0;
-  /* 移除白色背景，让卡片呈现在页面的米色背景上 */
 }
 
 .section-header {
@@ -85,7 +123,7 @@ const ingredients = ref([
 }
 
 .view-all-link {
-  color: #d3aa79 !important; /* 使用原型图中的橙棕色调 */
+  color: #d3aa79 !important;
   padding: 0 !important;
   height: auto !important;
   display: flex;
@@ -104,6 +142,7 @@ const ingredients = ref([
   overflow: hidden;
   transition: all 0.3s ease;
   background-color: white;
+  cursor: pointer; /* 添加指针样式，增强可点击性 */
 }
 
 .ingredient-card:hover {
@@ -112,7 +151,7 @@ const ingredients = ref([
 }
 
 .ingredient-image {
-  height: 180px; /* 增加高度使其更接近原型图 */
+  height: 180px;
   overflow: hidden;
 }
 
@@ -149,7 +188,6 @@ const ingredients = ref([
   height: auto !important;
 }
 
-/* 让内容更接近原型图的样式 */
 :deep(.ant-card-meta-title) {
   font-size: 18px;
   font-weight: bold;
