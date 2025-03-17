@@ -2,11 +2,16 @@
   <div class="featured-collections">
     <div class="section-header">
       <h2 class="section-title">精选合集</h2>
-      <a class="view-all-link">查看全部 <right-outlined /></a>
+      <router-link to="/collections" class="view-all-link">查看全部 <right-outlined /></router-link>
     </div>
 
     <div class="collections-list">
-      <div v-for="(collection, index) in collections" :key="index" class="collection-item">
+      <div
+          v-for="(collection, index) in collections"
+          :key="index"
+          class="collection-item"
+          @click="navigateToDetail(collection.id)"
+      >
         <div class="collection-image">
           <img :src="collection.image" :alt="collection.title" />
           <div class="collection-tag" :style="{ backgroundColor: collection.tagBg, color: collection.tagColor }">
@@ -20,7 +25,7 @@
 
           <div class="collection-footer">
             <span class="recipe-count">{{ collection.recipeCount }}</span>
-            <a class="detail-link">查看详情 <right-outlined /></a>
+            <span class="detail-link">查看详情 <right-outlined /></span>
           </div>
         </div>
       </div>
@@ -31,10 +36,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RightOutlined } from '@ant-design/icons-vue'
+import { useRouter } from 'vue-router'
 
-// 精选合集数据
+// 获取路由实例
+const router = useRouter()
+
+// 精选合集数据 - 添加了id字段用于导航
 const collections = ref([
   {
+    id: '1',
     title: '秋季养生食谱合集',
     description: '精选30道秋季养生菜肴，滋补身体，增强免疫力',
     image: 'https://images.unsplash.com/photo-1577106263724-2c8e03bfe9cf',
@@ -44,6 +54,7 @@ const collections = ref([
     recipeCount: '30道菜谱'
   },
   {
+    id: '2',
     title: '15分钟快手早餐',
     description: '为忙碌的早晨准备的快速营养早餐方案，让你轻松开启一天',
     image: 'https://images.unsplash.com/photo-1547928576-a4a33237cbc3',
@@ -53,14 +64,24 @@ const collections = ref([
     recipeCount: '25道菜谱'
   }
 ])
+
+// 导航到合集详情页
+const navigateToDetail = (id: string) => {
+  router.push({
+    name: 'CollectionDetail',
+    params: { id }
+  })
+}
 </script>
 
 <style scoped>
-/* 整体容器 - 不设置背景色 */
+/* 整体容器 - 不设置背景色，添加了米色背景 */
 .featured-collections {
   max-width: 1140px;
   margin: 0 auto;
-  padding: 24px 0;
+  padding: 24px 16px;
+  background-color: #FAF8F3; /* 添加米色背景 */
+  border-radius: 12px;
 }
 
 /* 标题区域 */
@@ -84,6 +105,12 @@ const collections = ref([
   display: flex;
   align-items: center;
   cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.view-all-link:hover {
+  color: #b68c5d;
 }
 
 /* 合集列表 */
@@ -135,6 +162,7 @@ const collections = ref([
   padding: 2px 10px;
   border-radius: 12px;
   font-size: 12px;
+  font-weight: 500;
 }
 
 /* 合集信息 */
@@ -183,7 +211,11 @@ const collections = ref([
   font-size: 14px;
   display: flex;
   align-items: center;
-  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.collection-item:hover .detail-link {
+  color: #b68c5d;
 }
 
 /* 响应式布局 */
@@ -200,6 +232,10 @@ const collections = ref([
 
   .collection-image {
     flex: 0 0 180px;
+  }
+
+  .featured-collections {
+    padding: 20px 12px;
   }
 }
 </style>

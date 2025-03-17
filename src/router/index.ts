@@ -84,39 +84,42 @@ const routes: Array<RouteRecordRaw> = [
             requiresAuth: false
         }
     },
-    // {
-    //     path: '/create-recipe',
-    //     name: 'CreateRecipe',
-    //     component: () => import('@/pages/recipes/CreateRecipe.vue'),
-    //     meta: {
-    //         title: '创建菜谱',
-    //         requiresAuth: true
-    //     }
-    // },
-    // {
-    //     path: '/edit-recipe/:id',
-    //     name: 'EditRecipe',
-    //     component: () => import('@/pages/recipes/EditRecipe.vue'),
-    //     meta: {
-    //         title: '编辑菜谱',
-    //         requiresAuth: true
-    //     }
-    // },
-    // {
-    //     path: '/recipes/:id',
-    //     name: 'RecipeDetail',
-    //     component: () => import('@/pages/recipes/RecipeDetail.vue')
-    // },
-    // {
-    //     path: '/ingredients',
-    //     name: 'Ingredients',
-    //     component: () => import('@/pages/ingredients/IngredientList.vue')
-    // },
-    // {
-    //     path: '/collections',
-    //     name: 'Collections',
-    //     component: () => import('@/pages/collections/CollectionList.vue')
-    // },
+    {
+        path: '/create-recipe',
+        name: 'CreateRecipe',
+        component: () => import('@/pages/recipes/RecipeAdd.vue'),
+        meta: {
+            title: '创建菜谱',
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/edit-recipe/:id',
+        name: 'EditRecipe',
+        component: () => import('@/pages/recipes/EditRecipe.vue'),
+        meta: {
+            title: '编辑菜谱',
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/collections',
+        name: 'CollectionList',
+        component: () => import('@/pages/collections/CollectionList.vue'),
+        meta: {
+            title: '合集列表',
+            requiresAuth: false
+        }
+    },
+    {
+        path: '/collections/:id',
+        name: 'CollectionDetail',
+        component: () => import('@/pages/collections/CollectionDetail.vue'),
+        meta: {
+            title: '合集详情',
+            requiresAuth: false
+        }
+    },
     // {
     //     path: '/tips',
     //     name: 'CookingTips',
