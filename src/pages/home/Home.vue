@@ -2,11 +2,9 @@
   <div class="home-page">
     <Banner />
     <Announcement />
-      <SeasonalIngredients />
+    <SeasonalIngredients />
     <RecommendedRecipes />
-    <div class="container content-block">
-      <FeaturedCollections />
-    </div>
+    <FeaturedCollections />
     <CookingTips />
   </div>
 </template>
