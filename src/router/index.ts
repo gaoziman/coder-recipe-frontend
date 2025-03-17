@@ -57,13 +57,49 @@ const routes: Array<RouteRecordRaw> = [
             requiresAuth: false
         }
     },
+    {
+        path: '/recipes',
+        name: 'RecipeList',
+        component: () => import('@/pages/recipes/RecipeList.vue'),
+        meta: {
+            title: '菜谱列表',
+            requiresAuth: false
+        }
+    },
+    {
+        path: '/recipes/:id',
+        name: 'RecipeDetail',
+        component: () => import('@/pages/recipes/RecipeDetail.vue'),
+        meta: {
+            title: '菜谱详情',
+            requiresAuth: false
+        }
+    },
+    {
+        path: '/recipes/category/:categoryId',
+        name: 'RecipeCategory',
+        component: () => import('@/pages/recipes/RecipeCategory.vue'),
+        meta: {
+            title: '菜谱分类',
+            requiresAuth: false
+        }
+    },
     // {
-    //     path: '/recipes',
-    //     name: 'Recipes',
-    //     component: () => import('@/pages/recipes/RecipesList.vue'),
+    //     path: '/create-recipe',
+    //     name: 'CreateRecipe',
+    //     component: () => import('@/pages/recipes/CreateRecipe.vue'),
     //     meta: {
-    //         title: '菜谱列表',
-    //         requiresAuth: false
+    //         title: '创建菜谱',
+    //         requiresAuth: true
+    //     }
+    // },
+    // {
+    //     path: '/edit-recipe/:id',
+    //     name: 'EditRecipe',
+    //     component: () => import('@/pages/recipes/EditRecipe.vue'),
+    //     meta: {
+    //         title: '编辑菜谱',
+    //         requiresAuth: true
     //     }
     // },
     // {

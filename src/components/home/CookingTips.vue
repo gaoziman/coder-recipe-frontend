@@ -1,28 +1,30 @@
 <template>
-  <div class="tips-section-wrapper">
-    <section class="cooking-tips">
-      <div class="section-header">
-        <h2 class="section-title">烹饪小贴士</h2>
-        <a-button type="link" class="view-all-link">
-          查看全部 <right-outlined />
-        </a-button>
-      </div>
+  <div class="cooking-tips-wrapper">
+    <div class="section-header">
+      <h2 class="section-title">烹饪小贴士</h2>
+      <a-button type="link" class="view-all-link">
+        查看全部 <right-outlined />
+      </a-button>
+    </div>
 
-      <div class="tips-container">
-        <div class="tip-item" v-for="(tip, index) in cookingTips" :key="index">
-          <div class="tip-icon-container">
+    <div class="tips-container">
+      <div class="tip-item" v-for="(tip, index) in cookingTips" :key="index">
+        <div class="tip-icon-container">
+          <div class="icon-circle">
             <bulb-outlined class="tip-icon" />
           </div>
-          <div class="tip-content">
-            <h3 class="tip-title">{{ tip.title }}</h3>
-            <p class="tip-text">{{ tip.content }}</p>
+        </div>
+        <div class="tip-content">
+          <h3 class="tip-title">{{ tip.title }}</h3>
+          <p class="tip-text">{{ tip.content }}</p>
+          <div class="tip-footer">
             <a-button type="link" class="detail-link">
               查看详情 <right-outlined />
             </a-button>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
@@ -48,21 +50,11 @@ const cookingTips = ref([
 </script>
 
 <style scoped>
-.tips-section-wrapper {
+.cooking-tips-wrapper {
   width: 100%;
-  padding: 32px 0;
-  display: flex;
-  justify-content: center;
-}
-
-.cooking-tips {
-  background-color: white;
-  border-radius: 12px;
-  padding: 32px;
-  width: 100%;
-  max-width: 1140px; /* 设置最大宽度，与原型图一致 */
+  max-width: 1140px;
   margin: 0 auto;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  padding: 32px 0;
 }
 
 .section-header {
@@ -80,7 +72,7 @@ const cookingTips = ref([
 }
 
 .view-all-link {
-  color: #d3aa79 !important; /* 使用原型图中的颜色 */
+  color: #d3aa79 !important;
   padding: 0 !important;
   height: auto !important;
   display: flex;
@@ -89,22 +81,52 @@ const cookingTips = ref([
 }
 
 .tips-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
   gap: 16px;
 }
 
 .tip-item {
   background-color: #FFF8F0;
-  border-radius: 8px;
-  padding: 16px;
+  border-radius: 12px;
+  padding: 20px;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(255, 153, 102, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tip-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #FF9966, #FF7043);
+  border-radius: 4px 0 0 4px;
+}
+
+.tip-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(255, 153, 102, 0.12);
 }
 
 .tip-icon-container {
-  margin-top: 4px;
+  margin-top: 0;
+}
+
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 153, 102, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .tip-icon {
@@ -117,17 +139,22 @@ const cookingTips = ref([
 }
 
 .tip-title {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: 600;
   color: #333333;
-  margin: 0 0 8px 0;
+  margin: 0 0 10px 0;
 }
 
 .tip-text {
-  font-size: 14px;
+  font-size: 15px;
   color: #666666;
-  margin: 0 0 12px 0;
+  margin: 0 0 16px 0;
   line-height: 1.6;
+}
+
+.tip-footer {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .detail-link {
@@ -137,13 +164,38 @@ const cookingTips = ref([
   font-size: 14px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  position: relative;
+  overflow: hidden;
+}
+
+.detail-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #FF9966;
+  transition: width 0.3s ease;
+}
+
+.detail-link:hover::after {
   width: 100%;
 }
 
+@media (min-width: 768px) {
+  .tips-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
-  .cooking-tips {
+  .cooking-tips-wrapper {
     padding: 24px 16px;
+  }
+
+  .tips-container {
+    grid-template-columns: 1fr;
   }
 }
 </style>
