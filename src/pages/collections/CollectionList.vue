@@ -91,7 +91,7 @@
       <div class="section-header">
         <h2 class="section-title">特色合集</h2>
         <a-button type="link" @click="viewAllFeatured">
-          查看全部 <right-outlined />
+          <span style="color: #FF9966; ">查看全部 <right-outlined /></span>
         </a-button>
       </div>
 
@@ -394,7 +394,7 @@ const allCollections = reactive([
   },
   // 中式家常菜合集
   {
-    id: 'chinese-home-cooking',
+    id: 'chinese-home-tips',
     title: '中华家常菜必学100道',
     description: '收录百道经典中式家常菜，从基础到进阶，让你轻松掌握中华美食精髓。',
     coverImage: 'https://images.unsplash.com/photo-1563245372-f21724e3856d',
@@ -522,7 +522,7 @@ const featuredChefs = [
     title: '中式烹饪大师',
     avatar: 'https://i.pravatar.cc/150?img=51',
     recommendedCollection: {
-      id: 'chinese-home-cooking',
+      id: 'chinese-home-tips',
       title: '中华家常菜必学100道',
       description: '收录百道经典中式家常菜，从基础到进阶，让你轻松掌握中华美食精髓。'
     }

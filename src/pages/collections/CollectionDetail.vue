@@ -277,7 +277,7 @@ const sortOption = ref('recommended')
 
 // 分类列表
 const categories = [
-  { value: 'home-cooking', label: '春季家常菜' },
+  { value: 'home-tips', label: '春季家常菜' },
   { value: 'salad', label: '春季轻食沙拉' },
   { value: 'soup', label: '春季养生汤品' },
   { value: 'dessert', label: '春季甜点' },
@@ -287,7 +287,7 @@ const categories = [
 // 显示的分类和菜谱
 const displayedCategories = ref([
   {
-    id: 'home-cooking',
+    id: 'home-tips',
     name: '春季家常菜',
     icon: 'home',
     totalCount: 6,

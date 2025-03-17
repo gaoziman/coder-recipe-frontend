@@ -1,35 +1,44 @@
 <template>
-  <div class="featured-collections">
-    <div class="section-header">
-      <h2 class="section-title">精选合集</h2>
-      <router-link to="/collections" class="view-all-link">查看全部 <right-outlined /></router-link>
-    </div>
+  <div class="collection-section-wrapper">
+    <section class="featured-collections">
+      <div class="section-header">
+        <h2 class="section-title">精选合集</h2>
+        <router-link to="/collections" class="view-all-link">
+          查看全部 <right-outlined />
+        </router-link>
+      </div>
 
-    <div class="collections-list">
-      <div
-          v-for="(collection, index) in collections"
-          :key="index"
-          class="collection-item"
-          @click="navigateToDetail(collection.id)"
-      >
-        <div class="collection-image">
-          <img :src="collection.image" :alt="collection.title" />
-          <div class="collection-tag" :style="{ backgroundColor: collection.tagBg, color: collection.tagColor }">
-            {{ collection.tag }}
+      <div class="collections-grid">
+        <div
+            class="collection-card"
+            v-for="(collection, index) in collections"
+            :key="index"
+            @click="navigateToDetail(collection.id)"
+        >
+          <div class="collection-image-container">
+            <img :src="collection.image" :alt="collection.title" class="collection-image" />
+            <a-tag
+                class="collection-tag"
+                :style="{ backgroundColor: collection.tagBg, color: collection.tagColor }"
+            >
+              {{ collection.tag }}
+            </a-tag>
           </div>
-        </div>
 
-        <div class="collection-info">
-          <h3 class="collection-title">{{ collection.title }}</h3>
-          <p class="collection-description">{{ collection.description }}</p>
+          <div class="collection-content">
+            <h3 class="collection-title">{{ collection.title }}</h3>
+            <p class="collection-description">{{ collection.description }}</p>
 
-          <div class="collection-footer">
-            <span class="recipe-count">{{ collection.recipeCount }}</span>
-            <span class="detail-link">查看详情 <right-outlined /></span>
+            <div class="collection-footer">
+              <span class="recipe-count">{{ collection.recipeCount }}</span>
+              <span class="detail-link">
+                查看详情 <right-outlined />
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -41,7 +50,7 @@ import { useRouter } from 'vue-router'
 // 获取路由实例
 const router = useRouter()
 
-// 精选合集数据 - 添加了id字段用于导航
+// 精选合集数据
 const collections = ref([
   {
     id: '1',
@@ -75,16 +84,20 @@ const navigateToDetail = (id: string) => {
 </script>
 
 <style scoped>
-/* 整体容器 - 不设置背景色，添加了米色背景 */
-.featured-collections {
-  max-width: 1140px;
-  margin: 0 auto;
-  padding: 24px 16px;
-  background-color: #FAF8F3; /* 添加米色背景 */
-  border-radius: 12px;
+.collection-section-wrapper {
+  width: 100%;
+  padding: 32px 0;
 }
 
-/* 标题区域 */
+.featured-collections {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  background-color: #FAF8F3;
+  border-radius: 12px;
+  padding: 24px;
+}
+
 .section-header {
   display: flex;
   justify-content: space-between;
@@ -96,7 +109,7 @@ const navigateToDetail = (id: string) => {
   font-size: 22px;
   font-weight: bold;
   margin: 0;
-  color: #333;
+  color: #333333;
 }
 
 .view-all-link {
@@ -104,71 +117,72 @@ const navigateToDetail = (id: string) => {
   font-size: 14px;
   display: flex;
   align-items: center;
-  cursor: pointer;
   text-decoration: none;
   transition: color 0.3s ease;
+}
+
+/* 为箭头添加左侧间距 */
+.view-all-link :deep(.anticon) {
+  margin-left: 4px;
 }
 
 .view-all-link:hover {
   color: #b68c5d;
 }
 
-/* 合集列表 */
-.collections-list {
+.collections-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
 
-/* 合集卡片 */
-.collection-item {
-  display: flex;
-  background-color: #fff;
+.collection-card {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
   cursor: pointer;
+  background-color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.collection-item:hover {
+.collection-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* 合集图片 */
-.collection-image {
+.collection-image-container {
   position: relative;
-  flex: 0 0 33.33%;
+  height: 180px;
   overflow: hidden;
 }
 
-.collection-image img {
+.collection-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
 
-.collection-item:hover .collection-image img {
+.collection-card:hover .collection-image {
   transform: scale(1.05);
 }
 
-/* 合集标签 */
 .collection-tag {
   position: absolute;
   top: 12px;
   left: 12px;
-  padding: 2px 10px;
-  border-radius: 12px;
+  border-radius: 16px;
+  border: none;
   font-size: 12px;
-  font-weight: 500;
+  padding: 2px 8px;
 }
 
-/* 合集信息 */
-.collection-info {
-  flex: 1;
+.collection-content {
   padding: 16px;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
@@ -176,17 +190,17 @@ const navigateToDetail = (id: string) => {
 .collection-title {
   font-size: 18px;
   font-weight: 600;
-  margin: 0 0 8px;
-  color: #333;
+  margin: 0 0 12px 0;
+  color: #333333;
 }
 
 .collection-description {
   font-size: 14px;
-  line-height: 1.5;
-  color: #666;
+  color: #666666;
   margin-bottom: 16px;
+  line-height: 1.5;
   flex-grow: 1;
-  /* 文本多行截断 */
+  /* 限制文本行数，超出部分显示省略号 */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -194,48 +208,73 @@ const navigateToDetail = (id: string) => {
   text-overflow: ellipsis;
 }
 
-/* 底部信息 */
 .collection-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: auto;
 }
 
 .recipe-count {
   font-size: 14px;
-  color: #666;
+  color: #666666;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 4px 12px;
+  border-radius: 16px;
 }
 
 .detail-link {
-  color: #d3aa79;
+  color: #FF9966 !important;
+  padding: 0 !important;
+  height: auto !important;
   font-size: 14px;
   display: flex;
   align-items: center;
-  transition: color 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.collection-item:hover .detail-link {
+.detail-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #FF9966;
+  transition: width 0.3s ease;
+}
+
+.detail-link:hover::after {
+  width: 100%;
+}
+
+/* 为箭头添加左侧间距 */
+.detail-link :deep(.anticon) {
+  margin-left: 4px;
+}
+
+.detail-link:hover {
   color: #b68c5d;
 }
 
-/* 响应式布局 */
-@media (max-width: 768px) {
-  .collections-list {
-    grid-template-columns: 1fr;
+@media (max-width: 1024px) {
+  .collections-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 480px) {
-  .collection-item {
-    flex-direction: column;
+@media (max-width: 640px) {
+  .collections-grid {
+    grid-template-columns: 1fr;
   }
 
-  .collection-image {
-    flex: 0 0 180px;
+  .collection-image-container {
+    height: 160px;
   }
 
   .featured-collections {
-    padding: 20px 12px;
+    padding: 20px 16px;
   }
 }
 </style>

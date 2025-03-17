@@ -2,13 +2,13 @@
   <div class="cooking-tips-wrapper">
     <div class="section-header">
       <h2 class="section-title">烹饪小贴士</h2>
-      <a-button type="link" class="view-all-link">
+      <a-button type="link" class="view-all-link" @click="goToTipsList">
         查看全部 <right-outlined />
       </a-button>
     </div>
 
     <div class="tips-container">
-      <div class="tip-item" v-for="(tip, index) in cookingTips" :key="index">
+      <div class="tip-item" v-for="(tip, index) in cookingTips" :key="index" @click="goToTipDetail(tip.id)">
         <div class="tip-icon-container">
           <div class="icon-circle">
             <bulb-outlined class="tip-icon" />
@@ -30,23 +30,44 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { RightOutlined, BulbOutlined } from '@ant-design/icons-vue'
 
-// 烹饪小贴士数据
+const router = useRouter()
+
+// 烹饪小贴士数据 - 添加了id属性用于导航
 const cookingTips = ref([
   {
+    id: 'cooking-rice',
     title: '煮饭小技巧',
     content: '煮米饭前先浸泡20分钟，加入少许盐和一滴油，能让米饭更加松软香甜，不易粘锅'
   },
   {
+    id: 'vegetable-fresh',
     title: '蔬菜保鲜法',
     content: '将绿叶蔬菜包裹在湿纸巾中，放入保鲜袋保存在冰箱中，能延长保鲜期至少3天'
   },
   {
+    id: 'knife-skills',
     title: '刀工技巧',
     content: '切洋葱前先将其放入冰水中浸泡10分钟，或者在切之前将刀稍微浸湿，能减少辣眼睛'
   }
 ])
+
+// 跳转到贴士详情页
+const goToTipDetail = (tipId: string) => {
+  router.push({
+    name: 'CookingTipDetail',
+    params: { id: tipId }
+  })
+}
+
+// 跳转到贴士列表页
+const goToTipsList = () => {
+  router.push({
+    name: 'CookingTipsList'
+  })
+}
 </script>
 
 <style scoped>
@@ -97,6 +118,7 @@ const cookingTips = ref([
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .tip-item::before {

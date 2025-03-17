@@ -120,11 +120,24 @@ const routes: Array<RouteRecordRaw> = [
             requiresAuth: false
         }
     },
-    // {
-    //     path: '/tips',
-    //     name: 'CookingTips',
-    //     component: () => import('@/pages/tips/CookingTipsList.vue')
-    // },
+    {
+        path: '/tips',
+        name: 'CookingTipsList',
+        component: () => import('@/pages/tips/CookingTipsList.vue'),
+        meta: {
+            title: '烹饪技巧列表',
+            requiresAuth: false
+        }
+    },
+    {
+        path: '/tips/:id',
+        name: 'CookingTipDetail',
+        component: () => import('@/pages/tips/CookingTipsDetail.vue'),
+        meta: {
+            title: '烹饪技巧详情',
+            requiresAuth: false
+        }
+    },
     // {AI食材搭配
     //     path: '/search',
     //     name: 'Search',
