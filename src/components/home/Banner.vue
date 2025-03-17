@@ -5,13 +5,13 @@
         <h2 class="banner-title">探索美食的无限可能</h2>
         <p class="banner-description">记录美味，分享生活，让每一顿饭都成为难忘的时光</p>
         <div class="banner-buttons">
-          <a-button size="large" class="banner-btn primary-btn">
+          <a-button size="large" class="banner-btn primary-btn" @click="navigateToRecipes">
             <template #icon><book-outlined /></template>
             浏览菜谱
           </a-button>
-          <a-button size="large" class="banner-btn outline-btn">
+          <a-button size="large" class="banner-btn outline-btn" @click="navigateToCreateRecipe">
             <template #icon><plus-circle-outlined /></template>
-            创建食谱
+            创建菜谱
           </a-button>
         </div>
       </div>
@@ -25,6 +25,34 @@
 
 <script setup lang="ts">
 import { BookOutlined, PlusCircleOutlined } from '@ant-design/icons-vue'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+
+// 获取路由实例
+const router = useRouter()
+// 获取用户状态管理
+const userStore = useUserStore()
+
+// 导航到菜谱列表页面
+const navigateToRecipes = () => {
+  router.push({ name: 'RecipeList' })
+}
+
+// 导航到创建菜谱页面
+// 因为创建菜谱需要用户登录，所以需要先检查用户是否已登录
+const navigateToCreateRecipe = () => {
+  // 检查用户是否已登录
+  if (userStore.isLoggedIn) {
+    // 用户已登录，直接导航到创建菜谱页面
+    router.push({ name: 'CreateRecipe' })
+  } else {
+    // 用户未登录，记住当前要跳转的路径
+    localStorage.setItem('redirectPath', '/create-recipe')
+
+    // 触发登录弹窗显示
+    window.dispatchEvent(new CustomEvent('show-login-modal'))
+  }
+}
 </script>
 
 <style scoped>

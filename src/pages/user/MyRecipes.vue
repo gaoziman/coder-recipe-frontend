@@ -4,8 +4,8 @@
     <!-- 标题和创建按钮区域 -->
     <div class="page-header">
       <h2 class="page-title">我的菜谱</h2>
-      <a-button type="primary" class="create-btn">
-        <plus-outlined />
+      <a-button type="primary" class="create-btn"  @click="gotoRecipeAdd">
+        <plus-outlined/>
         创建新菜谱
       </a-button>
     </div>
@@ -16,7 +16,7 @@
         <a-dropdown>
           <a-button class="filter-btn">
             所有分类
-            <down-outlined />
+            <down-outlined/>
           </a-button>
           <template #overlay>
             <a-menu @click="handleCategoryChange">
@@ -33,7 +33,7 @@
         <a-dropdown>
           <a-button class="filter-btn">
             所有难度
-            <down-outlined />
+            <down-outlined/>
           </a-button>
           <template #overlay>
             <a-menu @click="handleDifficultyChange">
@@ -48,7 +48,7 @@
         <a-dropdown>
           <a-button class="filter-btn">
             所有时间
-            <down-outlined />
+            <down-outlined/>
           </a-button>
           <template #overlay>
             <a-menu @click="handleTimeChange">
@@ -67,7 +67,7 @@
         <a-dropdown>
           <a-button class="sort-btn">
             最近更新
-            <down-outlined />
+            <down-outlined/>
           </a-button>
           <template #overlay>
             <a-menu @click="handleSortChange">
@@ -85,7 +85,7 @@
     <div class="recipe-grid">
       <div v-for="recipe in recipes" :key="recipe.id" class="recipe-card">
         <div class="recipe-image-container">
-          <img :src="recipe.image" :alt="recipe.title" class="recipe-image" />
+          <img :src="recipe.image" :alt="recipe.title" class="recipe-image"/>
           <heart-outlined
               v-if="!recipe.favorite"
               class="favorite-icon"
@@ -102,10 +102,10 @@
           <h3 class="recipe-title">{{ recipe.title }}</h3>
           <div class="recipe-meta">
             <span class="cooking-time">
-              <clock-circle-outlined /> {{ recipe.cookingTime }}分钟
+              <clock-circle-outlined/> {{ recipe.cookingTime }}分钟
             </span>
             <span class="publish-date">
-              <calendar-outlined /> {{ recipe.date }}
+              <calendar-outlined/> {{ recipe.date }}
             </span>
           </div>
           <p class="recipe-description">{{ recipe.description }}</p>
@@ -116,13 +116,13 @@
 
         <div class="recipe-actions">
           <a-button type="text" class="action-btn" @click="editRecipe(recipe.id)">
-            <edit-outlined />
+            <edit-outlined/>
           </a-button>
           <a-button type="text" class="action-btn" @click="shareRecipe(recipe.id)">
-            <share-alt-outlined />
+            <share-alt-outlined/>
           </a-button>
           <a-button type="text" class="action-btn" @click="deleteRecipe(recipe.id)">
-            <delete-outlined />
+            <delete-outlined/>
           </a-button>
         </div>
       </div>
@@ -130,9 +130,9 @@
 
     <!-- 空状态 -->
     <div v-if="recipes.length === 0" class="empty-state">
-      <a-empty description="还没有菜谱，开始创建吧！" />
+      <a-empty description="还没有菜谱，开始创建吧！"/>
       <a-button type="primary" class="create-empty-btn">
-        <plus-outlined />
+        <plus-outlined/>
         创建第一个菜谱
       </a-button>
     </div>
@@ -210,7 +210,7 @@
           <div class="habit-stats">
             <div class="habit-item">
               <div class="habit-icon">
-                <clock-circle-outlined />
+                <clock-circle-outlined/>
               </div>
               <div class="habit-info">
                 <div class="habit-label">平均烹饪时间</div>
@@ -219,7 +219,7 @@
             </div>
             <div class="habit-item">
               <div class="habit-icon">
-                <fire-outlined />
+                <fire-outlined/>
               </div>
               <div class="habit-info">
                 <div class="habit-label">最常烹饪风格</div>
@@ -228,7 +228,7 @@
             </div>
             <div class="habit-item">
               <div class="habit-icon">
-                <calendar-outlined />
+                <calendar-outlined/>
               </div>
               <div class="habit-info">
                 <div class="habit-label">本月烹饪次数</div>
@@ -243,7 +243,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import {ref, reactive, onMounted} from 'vue';
 import {
   PlusOutlined,
   HeartOutlined,
@@ -256,7 +256,9 @@ import {
   CalendarOutlined,
   FireOutlined
 } from '@ant-design/icons-vue';
-import { Tag, message } from 'ant-design-vue';
+import {Tag, message} from 'ant-design-vue';
+import {useUserStore} from "@/stores/user";
+import {useRouter} from "vue-router";
 
 // 标签页状态
 const activeTab = ref('created');
@@ -265,6 +267,11 @@ const activeTab = ref('created');
 const current = ref(1);
 const total = ref(24);
 const pageSize = ref(6);
+
+// 获取路由实例
+const router = useRouter()
+// 获取用户状态管理
+const userStore = useUserStore()
 
 // 筛选状态
 const filter = reactive({
@@ -396,7 +403,7 @@ const fetchRecipes = () => {
 const editRecipe = (id: number) => {
   console.log('编辑菜谱', id);
   // 实际项目中跳转到编辑页面
-  // router.push(`/edit-recipe/${id}`);
+  router.push(`/edit-recipe/${id}`);
 };
 
 // 分享菜谱
@@ -410,6 +417,11 @@ const deleteRecipe = (id: number) => {
   message.success('菜谱已删除');
   recipes.value = recipes.value.filter(recipe => recipe.id !== id);
 };
+
+// 添加菜谱
+const gotoRecipeAdd = () => {
+  router.push({ name: 'CreateRecipe' })
+}
 
 // 生命周期钩子
 onMounted(() => {
