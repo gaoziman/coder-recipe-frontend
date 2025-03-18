@@ -55,6 +55,14 @@
                 <bulb-outlined class="admin-item-icon" />
                 <span>贴士管理</span>
               </router-link>
+              <router-link to="/admin/systemSettings" class="admin-menu-item">
+                <bulb-outlined class="admin-item-icon" />
+                <span>系统管理</span>
+              </router-link>
+              <router-link to="/admin/contentReview" class="admin-menu-item">
+                <bulb-outlined class="admin-item-icon" />
+                <span>审核管理</span>
+              </router-link>
             </div>
           </div>
         </div>

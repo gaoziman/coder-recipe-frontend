@@ -312,6 +312,26 @@ const routes: Array<RouteRecordRaw> = [
                     requiresAuth: true,
                     requiresAdmin: true
                 }
+            },
+            {
+                path: 'systemSettings',
+                name: 'SystemSettings',
+                component: () => import('@/pages/admin/SystemSettings.vue'),
+                meta: {
+                    title: '系统管理',
+                    requiresAuth: true,
+                    requiresAdmin: true
+                }
+            },
+            {
+                path: 'contentReview',
+                name: 'ContentReview',
+                component: () => import('@/pages/admin/ContentReview.vue'),
+                meta: {
+                    title: '审核管理',
+                    requiresAuth: true,
+                    requiresAdmin: true
+                }
             }
         ]
     },

@@ -64,6 +64,16 @@
           <span v-if="!collapsed">贴士管理</span>
         </a-menu-item>
 
+        <a-menu-item key="/admin/systemSettings">
+          <template #icon><bulb-outlined /></template>
+          <span v-if="!collapsed">系统管理</span>
+        </a-menu-item>
+
+        <a-menu-item key="/admin/contentReview">
+          <template #icon><bulb-outlined /></template>
+          <span v-if="!collapsed">审核管理</span>
+        </a-menu-item>
+
       </a-menu>
     </a-layout-sider>
 
