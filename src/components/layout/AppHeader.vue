@@ -19,6 +19,45 @@
         <router-link to="/ai" class="nav-button" :class="{ active: currentRoutePath.startsWith('/ai') }">AI搭配</router-link>
         <router-link to="/collections" class="nav-button" :class="{ active: currentRoutePath.startsWith('/collections') }">合集</router-link>
         <router-link to="/tips" class="nav-button" :class="{ active: currentRoutePath.startsWith('/tips') }">烹饪技巧</router-link>
+
+        <!-- 管理员导航下拉菜单 - 仅对管理员显示 -->
+        <div class="admin-dropdown" v-if="isAdmin">
+          <div class="admin-link">
+            <span class="admin-text">管理中心</span>
+          </div>
+          <div class="admin-dropdown-panel">
+            <div class="admin-menu-wrapper">
+              <router-link to="/admin/dashboard" class="admin-menu-item">
+                <dashboard-outlined class="admin-item-icon" />
+                <span>控制台</span>
+              </router-link>
+              <router-link to="/admin/users" class="admin-menu-item">
+                <team-outlined class="admin-item-icon" />
+                <span>用户管理</span>
+              </router-link>
+              <router-link to="/admin/ingredients" class="admin-menu-item">
+                <database-outlined class="admin-item-icon" />
+                <span>食材管理</span>
+              </router-link>
+              <router-link to="/admin/recipes" class="admin-menu-item">
+                <appstore-outlined class="admin-item-icon" />
+                <span>菜谱管理</span>
+              </router-link>
+              <router-link to="/admin/categories" class="admin-menu-item">
+                <folder-outlined class="admin-item-icon" />
+                <span>分类管理</span>
+              </router-link>
+              <router-link to="/admin/tags" class="admin-menu-item">
+                <tag-outlined class="admin-item-icon" />
+                <span>标签管理</span>
+              </router-link>
+              <router-link to="/admin/tips" class="admin-menu-item">
+                <bulb-outlined class="admin-item-icon" />
+                <span>贴士管理</span>
+              </router-link>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="header-actions">
@@ -86,6 +125,9 @@ import {
 // 路由相关
 const router = useRouter()
 const route = useRoute()
+
+// 添加管理员状态判断
+const isAdmin = computed(() => userStore.userInfo.isAdmin)
 
 // 当前路由路径
 const currentRoutePath = computed(() => route.path)
@@ -435,6 +477,105 @@ onMounted(() => {
 
 /* 特别为退出登录项添加红色图标颜色 */
 .logout-item:hover .item-icon {
+  color: #FF5E62;
+}
+/* 管理员下拉菜单样式 */
+.admin-dropdown {
+  position: relative;
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.admin-link {
+  height: 38px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 19px;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+
+.admin-link:hover {
+  color: #F0884C;
+  background-color: rgba(255, 153, 102, 0.08);
+}
+
+.admin-text {
+  margin-right: 4px;
+}
+
+.admin-arrow {
+  font-size: 12px;
+  color: #aaa;
+  transition: transform 0.2s;
+}
+
+.admin-dropdown:hover .admin-arrow {
+  transform: rotate(180deg);
+  color: #999;
+}
+
+/* 管理员下拉面板 */
+.admin-dropdown-panel {
+  position: absolute;
+  top: 56px;
+  left: 0;
+  background: white;
+  width: 160px;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+
+  /* 默认隐藏 */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: all 0.2s ease;
+}
+
+/* 显示下拉菜单 */
+.admin-dropdown:hover .admin-dropdown-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.admin-menu-wrapper {
+  padding: 4px;
+}
+
+/* 菜单项样式 */
+.admin-menu-item {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 12px;
+  font-size: 13px;
+  color: #555;
+  text-decoration: none;
+  transition: all 0.15s;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admin-menu-item:hover {
+  background-color: rgba(255, 153, 102, 0.15);
+  color: #FF5E62;
+}
+
+.admin-item-icon {
+  font-size: 14px;
+  color: #999;
+  margin-right: 8px;
+}
+
+.admin-menu-item:hover .admin-item-icon {
   color: #FF5E62;
 }
 </style>

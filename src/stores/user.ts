@@ -5,6 +5,7 @@ import { ref, computed } from 'vue'
 export interface UserInfo {
     id: string
     username: string
+    isAdmin:boolean,
     email: string
     avatar?: string
     token?: string
@@ -27,6 +28,7 @@ export const useUserStore = defineStore('user', () => {
                 username: email.split('@')[0],
                 email: email,
                 avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
+                isAdmin:true,
                 token: 'mock-jwt-token'
             }
 

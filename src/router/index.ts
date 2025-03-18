@@ -138,11 +138,6 @@ const routes: Array<RouteRecordRaw> = [
             requiresAuth: false
         }
     },
-    // {AI食材搭配
-    //     path: '/search',
-    //     name: 'Search',
-    //     component: () => import('@/pages/search/SearchResults.vue')
-    // },
     // 用户相关路由 - 需要登录权限
     {
         path: '/user',
@@ -236,26 +231,100 @@ const routes: Array<RouteRecordRaw> = [
             }
         ]
     },
-    // 创建菜谱路由 - 需要登录权限
-    // {
-    //     path: '/create-recipe',
-    //     name: 'CreateRecipe',
-    //     component: () => import('@/pages/recipes/CreateRecipe.vue'),
-    //     meta: { requiresAuth: true }
-    // },
-    // // 编辑菜谱路由 - 需要登录权限
-    // {
-    //     path: '/edit-recipe/:id',
-    //     name: 'EditRecipe',
-    //     component: () => import('@/pages/recipes/EditRecipe.vue'),
-    //     meta: { requiresAuth: true }
-    // },
-    // // 404 路由
-    // {
-    //     path: '/:pathMatch(.*)*',
-    //     name: 'NotFound',
-    //     component: () => import('@/pages/errors/NotFound.vue')
-    // }
+    // 添加管理员相关路由 - 需要放在现有路由的适当位置
+    {
+        path: '/admin',
+        name: 'AdminLayout',
+        component: () => import('@/pages/admin/AdminLayout.vue'),
+        meta: {
+            title: '管理中心',
+            requiresAuth: true,
+            requiresAdmin: true  // 新增权限标识
+        },
+        redirect: '/admin/dashboard',
+        children: [
+            {
+                path: 'dashboard',
+                name: 'AdminDashboard',
+                component: () => import('@/pages/admin/Dashboard.vue'),
+                meta: {
+                    title: '管理控制台',
+                    requiresAuth: true,
+                    requiresAdmin: true
+                }
+            },
+            {
+                path: 'recipes',
+                name: 'AdminRecipes',
+                component: () => import('@/pages/admin/RecipeManagement.vue'),
+                meta: {
+                    title: '菜谱管理',
+                    requiresAuth: true,
+                    requiresAdmin: true
+                }
+            },
+            {
+                path: 'categories',
+                name: 'AdminCategories',
+                component: () => import('@/pages/admin/CategoryManagement.vue'),
+                meta: {
+                    title: '分类管理',
+                    requiresAuth: true,
+                    requiresAdmin: true
+                }
+            },
+            {
+                path: 'tags',
+                name: 'AdminTags',
+                component: () => import('@/pages/admin/TagManagement.vue'),
+                meta: {
+                    title: '标签管理',
+                    requiresAuth: true,
+                    requiresAdmin: true
+                }
+            },
+            {
+                path: 'tips',
+                name: 'AdminTips',
+                component: () => import('@/pages/admin/TipsManagement.vue'),
+                meta: {
+                    title: '烹饪小贴士管理',
+                    requiresAuth: true,
+                    requiresAdmin: true
+                }
+            },
+            {
+                path: 'ingredients',
+                name: 'AdminIngredients',
+                component: () => import('@/pages/admin/IngredientManagement.vue'),
+                meta: {
+                    title: '食材管理',
+                    requiresAuth: true,
+                    requiresAdmin: true
+                }
+            },
+            {
+                path: 'users',
+                name: 'AdminUsers',
+                component: () => import('@/pages/admin/UserManagement.vue'),
+                meta: {
+                    title: '用户管理',
+                    requiresAuth: true,
+                    requiresAdmin: true
+                }
+            }
+        ]
+    },
+    // 404 路由
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import('@/pages/errors/NotFound.vue'),
+        meta: {
+            title: '页面未找到',
+            requiresAuth: false
+        }
+    }
 ]
 
 const router = createRouter({
@@ -268,33 +337,35 @@ const router = createRouter({
 })
 
 // 全局前置守卫
+// 在router/index.ts的全局前置守卫中添加权限检查逻辑
 router.beforeEach((to, from, next) => {
     // 设置文档标题的逻辑
     if (to.meta.title) {
         document.title = `${to.meta.title} - 味见好时光`
     }
+
     // 检查路由是否需要登录权限
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+    // 检查路由是否需要管理员权限
+    const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
 
-    if (requiresAuth) {
+    if (requiresAuth || requiresAdmin) {
         // 获取用户登录状态
         const userStore = useUserStore()
 
         if (!userStore.isLoggedIn) {
             // 用户未登录，显示提示并重定向到首页
             message.warning('请先登录以访问此页面')
-
-            // 把目标路由信息存到 localStorage，登录后可以重定向回来
             localStorage.setItem('redirectPath', to.fullPath)
-
-            // 重定向到首页
             next({path: '/'})
-
-            // 通过事件总线触发显示登录弹窗
-            // 这里需要一个全局事件总线来触发登录弹窗显示
-            // 这个功能将在 main.ts 中实现
             window.dispatchEvent(new CustomEvent('show-login-modal'))
+            return
+        }
 
+        // 检查管理员权限
+        if (requiresAdmin && !userStore.userInfo.isAdmin) {
+            message.error('您没有管理员权限访问此页面')
+            next({path: '/'})
             return
         }
     }

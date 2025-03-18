@@ -9,7 +9,7 @@
           <component :is="Component" />
         </transition>
       </router-view>
-      <FloatingButtons />
+      <FloatingButtons v-if="!isAdminPage" />
     </main>
 
     <app-footer />
@@ -17,13 +17,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import {ref, onMounted, computed} from 'vue'
+import { useRoute } from 'vue-router'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import FloatingButtons from "@/components/common/FloatingButtons.vue";
 
 // 创建对 AppHeader 组件的引用
 const headerRef = ref()
+
+const route = useRoute()
+
+const isAdminPage = computed(() => {
+  return route.path.startsWith('/admin')
+})
 
 // 挂载完成后，将登录方法暴露给全局
 onMounted(() => {
