@@ -2,25 +2,35 @@
   <div class="admin-dashboard">
     <!-- 欢迎区域 -->
     <div class="welcome-section">
-    <div class="welcome-content">
-      <h1>欢迎回来，<span class="username">{{ userName }}</span></h1>
-      <p>
-        <span class="clock-icon"><clock-circle-outlined /></span>
-        今天是 {{ formattedDate }} 星期{{ weekday }}，
-        <span class="time-wrapper">{{ hours }}:{{ minutes }}:<span class="second-highlight">{{ seconds }}</span> {{ greeting }}</span>
-      </p>
+      <div class="welcome-content">
+        <h1>
+          <span class="welcome-icon"></span>
+          欢迎回来<span class="username">{{ userName }}</span>
+        </h1>
+        <p>
+          <span class="clock-icon"></span>
+          今天是 {{ formattedDate }} 星期{{ weekday }}
+          <span class="time-container">
+        {{ hours }}:{{ minutes }}:<span class="second-highlight">{{ seconds }}</span>
+      </span>
+          <span class="greeting-container">{{ greeting }}</span>
+        </p>
+      </div>
+      <div class="welcome-actions">
+        <a-button class="action-button" type="primary" @click="navigateToCreateRecipe">
+          <template #icon>
+            <plus-outlined/>
+          </template>
+          新增菜谱
+        </a-button>
+        <a-button class="action-button">
+          <template #icon>
+            <file-search-outlined/>
+          </template>
+          查看报表
+        </a-button>
+      </div>
     </div>
-    <div class="welcome-actions">
-      <a-button class="action-button" type="primary">
-        <template #icon><plus-outlined /></template>
-        新增菜谱
-      </a-button>
-      <a-button class="action-button">
-        <template #icon><file-search-outlined /></template>
-        查看报表
-      </a-button>
-    </div>
-  </div>
 
     <!-- 数据概览卡片 -->
     <a-row :gutter="[24, 24]" class="stats-row">
@@ -189,11 +199,26 @@
         <div class="content-card">
           <div class="content-card-header">
             <h3>热门菜谱排行</h3>
-            <a-radio-group v-model:value="popularPeriod" button-style="solid" size="small">
-              <a-radio-button value="weekly">本周</a-radio-button>
-              <a-radio-button value="monthly">本月</a-radio-button>
-              <a-radio-button value="yearly">全年</a-radio-button>
-            </a-radio-group>
+            <div class="recipe-tabs">
+              <button
+                  class="recipe-tab-button"
+                  :class="{ active: popularPeriod === 'weekly' }"
+                  @click="popularPeriod = 'weekly'">
+                本周
+              </button>
+              <button
+                  class="recipe-tab-button"
+                  :class="{ active: popularPeriod === 'monthly' }"
+                  @click="popularPeriod = 'monthly'">
+                本月
+              </button>
+              <button
+                  class="recipe-tab-button"
+                  :class="{ active: popularPeriod === 'yearly' }"
+                  @click="popularPeriod = 'yearly'">
+                全年
+              </button>
+            </div>
           </div>
           <div class="popular-list">
             <div v-for="(item, index) in popularRecipes" :key="item.id" class="popular-item">
@@ -379,6 +404,7 @@ import {
   SendOutlined
 } from '@ant-design/icons-vue'
 import {useUserStore} from "@/stores/user";
+import router from "@/router";
 
 // 获取用户信息
 const userStore = useUserStore()
@@ -622,6 +648,22 @@ const recipeColumns = [
   }
 ]
 
+
+// 导航到创建菜谱页面
+const navigateToCreateRecipe = () => {
+  // 检查用户是否已登录
+  if (userStore.isLoggedIn) {
+    // 用户已登录，直接导航到创建菜谱页面
+    router.push({ name: 'CreateRecipe' })
+  } else {
+    // 用户未登录，记住当前要跳转的路径
+    localStorage.setItem('redirectPath', '/create-recipe')
+
+    // 触发登录弹窗显示
+    window.dispatchEvent(new CustomEvent('show-login-modal'))
+  }
+}
+
 // 初始化图表
 onMounted(() => {
   // 初始化访问量趋势图
@@ -777,42 +819,229 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 250, 245, 0.8));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 250, 245, 0.9));
   border-radius: 16px;
-  padding: 24px 32px;
-  box-shadow: 0 8px 24px rgba(240, 136, 76, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 28px 32px;
+  box-shadow: 0 8px 24px rgba(240, 136, 76, 0.12), 0 2px 4px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(240, 136, 76, 0.08);
+  border: 1px solid rgba(240, 136, 76, 0.1);
 }
 
-.welcome-section {
-  margin-bottom: 28px;
-  display: flex;
-  justify-content: space-between;
+/* 添加装饰元素 */
+.welcome-section::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, rgba(240, 136, 76, 0.2), rgba(255, 153, 102, 0.1));
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.welcome-section::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 30%;
+  width: 180px;
+  height: 10px;
+  background: linear-gradient(90deg, rgba(240, 136, 76, 0.15), rgba(255, 153, 102, 0));
+  border-radius: 50%;
+  z-index: 0;
+}
+
+
+.greeting-container {
+  display: inline-flex;
   align-items: center;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 250, 245, 0.8));
-  border-radius: 16px;
-  padding: 24px 32px;
-  box-shadow: 0 8px 24px rgba(240, 136, 76, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
-  backdrop-filter: blur(10px);
+  padding: 3px 10px;
+  background-color: rgba(240, 136, 76, 0.05);
+  border-radius: 6px;
+  font-weight: 500;
+  color: #444;
+}
+
+.welcome-content {
   position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(240, 136, 76, 0.08);
+  z-index: 1;
 }
 
 .welcome-content h1 {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 600;
   color: #333;
-  margin: 0 0 8px 0;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.5px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding-bottom: 8px;
+}
+
+.welcome-content h1::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg,
+  rgba(240, 136, 76, 0.8) 0%,
+  rgba(255, 153, 102, 0.4) 70%,
+  rgba(255, 153, 102, 0) 100%);
+  border-radius: 2px;
+}
+
+.username {
+  position: relative;
+  background: linear-gradient(135deg, #F0884C, #FF9966);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  font-weight: 700;
+  margin-left: 15px;
+  padding: 0 4px;
+}
+
+/* 给用户名添加光效 */
+.username::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: radial-gradient(ellipse at center, rgba(240, 136, 76, 0.15) 0%, rgba(240, 136, 76, 0) 70%);
+  border-radius: 6px;
+  z-index: -1;
+}
+
+/* 装饰小图标 */
+.welcome-icon {
+  font-size: 22px;
+  margin-right: 10px;
+  color: #F0884C;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 .welcome-content p {
-  font-size: 14px;
-  color: #666;
+  font-size: 15px;
+  color: #595959;
   margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  line-height: 1.6;
+}
+
+.clock-icon {
+  color: #F0884C;
+  margin-right: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.time-container {
+  display: inline-flex;
+  align-items: center;
+  background-color: rgba(240, 136, 76, 0.08);
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+  margin-right: 10px; /* 添加明显的右侧间距 */
+  color: #444;
+  margin-left: 10px;
+}
+
+.second-highlight {
+  display: inline-block;
+  color: #F0884C;
+  font-weight: 700;
+  min-width: 26px;
+  text-align: center;
+  animation: pulse-highlight 1s infinite;
+}
+
+/* 加强动画效果 */
+@keyframes pulse-highlight {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.second-highlight {
+  animation: pulse-highlight 1s infinite;
+}
+
+.welcome-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 12px;
+}
+
+.action-button {
+  height: 44px;
+  border-radius: 10px;
+  padding: 0 18px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 主按钮样式增强 */
+.action-button:first-child {
+  background: linear-gradient(to right, #F0884C, #FF9966) !important;
+  border: none !important;
+}
+
+/* 响应式处理 */
+@media (max-width: 768px) {
+  .welcome-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px;
+  }
+
+  .welcome-content h1 {
+    font-size: 22px;
+  }
+
+  .welcome-content p {
+    font-size: 14px;
+  }
 }
 
 .welcome-actions {
@@ -1308,14 +1537,106 @@ onMounted(() => {
 
 /* 可选：添加一个非常微妙的动画效果，不影响整体布局 */
 @keyframes subtle-blink {
-  0% { opacity: 1; }
-  50% { opacity: 0.8; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .second-highlight {
   animation: subtle-blink 1s infinite;
 }
+
+/* 热门菜谱排行标签页样式优化 */
+.recipe-tabs {
+  display: flex;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(240, 136, 76, 0.1);
+  border: 1px solid rgba(240, 136, 76, 0.1);
+}
+
+/* 单个标签按钮 */
+.recipe-tab-button {
+  flex: 1;
+  padding: 8px 14px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #666;
+  transition: all 0.3s ease;
+  position: relative;
+  white-space: nowrap;
+}
+
+/* 激活状态的标签 */
+.recipe-tab-button.active {
+  background: linear-gradient(to right, #F0884C, #FF9966);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(240, 136, 76, 0.2);
+}
+
+/* 非激活标签悬浮效果 */
+.recipe-tab-button:not(.active):hover {
+  background-color: rgba(240, 136, 76, 0.05);
+  color: #F0884C;
+}
+
+/* 全年标签特殊样式 */
+.recipe-tab-button.yearly {
+  color: #4D7CFF;
+}
+.recipe-tab-button.yearly.active {
+  background: linear-gradient(to right, #4D7CFF, #6E9AFF);
+}
+.recipe-tab-button.yearly:not(.active):hover {
+  background-color: rgba(77, 124, 255, 0.05);
+  color: #4D7CFF;
+}
+
+/* 内容卡片头部样式优化 */
+.content-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.content-card-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+/* 响应式调整 */
+@media (max-width: 576px) {
+  .content-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .recipe-tabs {
+    width: 100%;
+  }
+
+  .recipe-tab-button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
 /* 响应式调整 */
 @media (max-width: 768px) {
   .welcome-section {

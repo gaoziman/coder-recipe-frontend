@@ -11,7 +11,7 @@
           </a-button>
           <a-button size="large" class="banner-btn outline-btn" @click="navigateToCreateRecipe">
             <template #icon><plus-circle-outlined /></template>
-            创建菜谱
+            新建菜谱
           </a-button>
         </div>
       </div>
@@ -39,7 +39,6 @@ const navigateToRecipes = () => {
 }
 
 // 导航到创建菜谱页面
-// 因为创建菜谱需要用户登录，所以需要先检查用户是否已登录
 const navigateToCreateRecipe = () => {
   // 检查用户是否已登录
   if (userStore.isLoggedIn) {
